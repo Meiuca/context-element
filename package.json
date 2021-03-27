@@ -3,6 +3,8 @@
   "description": "A preconfigured template for Snowpack with LitElement",
   "version": "1.0.0",
   "license": "MIT",
+  "main": "src",
+  "module": "src",
   "author": "Levi Pires <waltvy.comercial@gmail.com>",
   "publishConfig": {
     "access": "public"
