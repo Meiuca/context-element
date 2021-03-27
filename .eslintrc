@@ -1,0 +1,10 @@
+{
+  "extends": ["@open-wc/eslint-config", "eslint-config-prettier"],
+  "plugins": ["eslint-plugin-prettier"],
+  "parser": "@babel/eslint-parser",
+  "rules": {
+    "object-curly-newline": "off",
+    "no-console": "warn"
+  },
+  "ignorePatterns": "*.d.ts"
+}
