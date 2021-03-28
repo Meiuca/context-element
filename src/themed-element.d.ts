@@ -27,4 +27,4 @@ declare type GooberGetter = (themeId: string) => GooberInstance;
 
 export default function themedElementMixin(
   getter: GooberGetter | GooberGetter[] = [],
-): ThemedElement;
+): typeof ThemedElement;
