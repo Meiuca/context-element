@@ -36,7 +36,7 @@ export function css(
  * `
  * ```
  */
-export function createGooberGetter(
+export function createGooberGetter<DefaultTheme>(
   tag: TemplateStringsArray,
-  ...props: CreateGooberGetterProps
+  ...props: CreateGooberGetterProps<DefaultTheme>
 ): GooberGetter;

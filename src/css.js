@@ -14,10 +14,17 @@ export function createGooberGetter(tag, ...props) {
     return buttonThemeId => {
       const theme = getComponentTheme(buttonThemeId, props[0]);
 
-      // eslint-disable-next-line no-param-reassign
-      props[0] = '';
+      const transformedProps = props.map(prop => {
+        if (typeof prop === 'function') {
+          return prop(theme);
+        }
 
-      const transformedProps = props.map(prop => (prop.call ? prop(theme) : prop));
+        if (typeof prop === 'string' || typeof prop === 'number') {
+          return prop;
+        }
+
+        return '';
+      });
 
       const cssText = transformedProps.reduce(
         (prev, curr, idx) => prev + curr + tag[idx + 1],
