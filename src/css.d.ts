@@ -9,9 +9,9 @@ declare interface GooberInstance {
 
 declare type ThemePropGetter<Theme> = (theme: Theme) => string | number;
 
-declare interface CreateGooberGetterProps<DefaultTheme = {}>
-  extends ReadonlyArray<ThemePropGetter<DefaultTheme> | string | number> {
-  0: DefaultTheme;
+declare interface CreateGooberGetterProps<Theme>
+  extends ReadonlyArray<ThemePropGetter<Theme> | string | number> {
+  0: Theme;
 }
 
 export function css(
