@@ -1,6 +1,9 @@
 import { LitElement } from 'lit-element';
 import { GooberInstance } from './css';
 
+/**
+ * This class is just a TypeScript declaration. The actual code does not export it.
+ */
 declare class ThemedElement extends LitElement {
   /**
    * The url of the individual theme: `https://themes.io/xmas/button`
