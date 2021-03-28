@@ -11,8 +11,8 @@ export function css(...params) {
 
 export function createGooberGetter(tag, ...props) {
   if (typeof props[0] === 'object') {
-    return buttonThemeId => {
-      const theme = getComponentTheme(buttonThemeId, props[0]);
+    return componentThemeId => {
+      const theme = getComponentTheme(componentThemeId, props[0]);
 
       const transformedProps = props.map(prop => {
         if (typeof prop === 'function') {
@@ -35,5 +35,5 @@ export function createGooberGetter(tag, ...props) {
     };
   }
 
-  throw new Error(`typeof props[0] is ${typeof props[0]}; must be 'object'`);
+  throw new Error(`typeof props[0] is '${typeof props[0]}'; must be 'object'`);
 }

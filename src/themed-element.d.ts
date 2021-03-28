@@ -1,10 +1,10 @@
-import { LitElement } from 'lit-element';
+import { CSSResult, LitElement } from 'lit-element';
 import { GooberInstance } from './css';
 
 /**
  * This class is just a TypeScript declaration. The actual code does not export it.
  */
-declare class ThemedElement extends LitElement {
+class ThemedElement extends LitElement {
   /**
    * The url of the individual theme: `https://themes.io/xmas/button`
    *
@@ -21,12 +21,18 @@ declare class ThemedElement extends LitElement {
    */
   styleId: string;
 
-  updateTheme(): Promise<void>;
+  /**
+   * @returns A promisse with the new theme
+   */
+  updateTheme(): Promise<unknown>;
 
-  updateStyles(): Promise<void>;
+  /**
+   * @returns A promisse with the new styles object
+   */
+  updateStyles(): Promise<CSSResult[]>;
 }
 
-declare type GooberGetter = (themeId: string) => GooberInstance;
+type GooberGetter = (themeId: string) => GooberInstance;
 
 export default function themedElementMixin(
   getter: GooberGetter | GooberGetter[] = [],

@@ -2,14 +2,14 @@ import { CSSAttribute } from 'goober';
 import { CSSResult } from 'lit-element';
 import { GooberGetter } from './themed-element';
 
-declare interface GooberInstance {
+interface GooberInstance {
   id: string;
   result: CSSResult;
 }
 
-declare type ThemePropGetter<Theme> = (theme: Theme) => string | number;
+type ThemePropGetter<Theme> = (theme: Theme) => string | number;
 
-declare interface CreateGooberGetterProps<Theme>
+interface CreateGooberGetterProps<Theme>
   extends ReadonlyArray<ThemePropGetter<Theme> | string | number> {
   0: Theme;
 }

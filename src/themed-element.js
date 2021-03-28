@@ -18,15 +18,15 @@ export default function themedElementMixin(getter = []) {
     constructor() {
       super();
 
-      window.DSRegistry.push(this);
+      window.DSRegistry?.push(this);
     }
 
-    update(_changedProperties) {
-      super.update(_changedProperties);
+    update(changedProperties) {
+      super.update(changedProperties);
 
       if (
-        (_changedProperties.get('theme') && this.theme !== _changedProperties.get('theme')) ||
-        _changedProperties.has('theme')
+        (changedProperties.get('theme') && this.theme !== changedProperties.get('theme')) ||
+        changedProperties.has('theme')
       ) {
         this.updateTheme();
       }
@@ -56,6 +56,8 @@ export default function themedElementMixin(getter = []) {
 
         await this.updateStyles();
       }
+
+      return window.DSTheme?.get(this.themeId);
     }
 
     async updateStyles() {
@@ -68,6 +70,8 @@ export default function themedElementMixin(getter = []) {
         [],
       );
 
+      this.constructor.styles = this.constructor._styles;
+
       this.styleIdList = mappedGetterList.reduce((prev, curr) => prev.concat([curr.id]), []);
 
       [this.styleId] = this.styleIdList;
@@ -75,6 +79,8 @@ export default function themedElementMixin(getter = []) {
       this.adoptStyles();
 
       await this.requestUpdate();
+
+      return this.constructor.styles;
     }
   };
 }

@@ -3,7 +3,7 @@ if (!window.DSRegistry) {
 }
 
 if (!window.DSTheme) {
-  window.DSTheme = {};
+  window.DSTheme = new Map();
 }
 
 export function clearDSRegistry() {
