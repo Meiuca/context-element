@@ -1,7 +1,7 @@
 import { LitElement, property } from 'lit-element';
 import { isArray, kebabCase } from 'lodash';
 import axios from 'axios';
-import { setTheme } from './theme.js';
+import { setTheme, getComponentTheme } from './theme.js';
 
 export default function themedElementMixin(getter = []) {
   const styleGetterList = isArray(getter) ? getter : [getter];
@@ -24,10 +24,7 @@ export default function themedElementMixin(getter = []) {
     update(changedProperties) {
       super.update(changedProperties);
 
-      if (
-        (changedProperties.get('theme') && this.theme !== changedProperties.get('theme')) ||
-        changedProperties.has('theme')
-      ) {
+      if (this.theme !== changedProperties.get('theme') || changedProperties.has('theme')) {
         this.updateTheme();
       }
     }
@@ -57,7 +54,7 @@ export default function themedElementMixin(getter = []) {
         await this.updateStyles();
       }
 
-      return window.DSTheme?.get(this.themeId);
+      return getComponentTheme(this.themeId);
     }
 
     async updateStyles() {

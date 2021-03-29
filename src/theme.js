@@ -46,7 +46,7 @@ export const setTheme = async (arg1, arg2) => {
 };
 
 export async function clearTheme() {
-  window.DSTheme = new Map();
+  window.DSTheme?.clear();
 
   await updateRegisteredComponents();
 }

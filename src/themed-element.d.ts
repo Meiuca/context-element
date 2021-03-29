@@ -4,7 +4,7 @@ import { GooberInstance } from './css';
 /**
  * This class is just a TypeScript declaration. The actual code does not export it.
  */
-class ThemedElement extends LitElement {
+declare class ThemedElement extends LitElement {
   /**
    * The url of the individual theme: `https://themes.io/xmas/button`
    *
@@ -32,8 +32,8 @@ class ThemedElement extends LitElement {
   updateStyles(): Promise<CSSResult[]>;
 }
 
-type GooberGetter = (themeId: string) => GooberInstance;
+declare type GooberGetter = (themeId: string) => GooberInstance;
 
 export default function themedElementMixin(
-  getter: GooberGetter | GooberGetter[] = [],
+  getter?: GooberGetter | GooberGetter[],
 ): typeof ThemedElement;

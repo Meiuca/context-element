@@ -7,5 +7,5 @@ if (!window.DSTheme) {
 }
 
 export function clearDSRegistry() {
-  window.DSRegistry = [];
+  window.DSRegistry.length = 0;
 }

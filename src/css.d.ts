@@ -2,21 +2,20 @@ import { CSSAttribute } from 'goober';
 import { CSSResult } from 'lit-element';
 import { GooberGetter } from './themed-element';
 
-interface GooberInstance {
+declare interface GooberInstance {
   id: string;
   result: CSSResult;
 }
 
-type ThemePropGetter<Theme> = (theme: Theme) => string | number;
+declare type ThemePropGetter<Theme> = (theme: Theme) => string | number;
 
-interface CreateGooberGetterProps<Theme>
-  extends ReadonlyArray<ThemePropGetter<Theme> | string | number> {
+declare type CreateGooberGetterProps<Theme> = Array<ThemePropGetter<Theme> | string | number> & {
   0: Theme;
-}
+};
 
 export function css(
   tag: string | CSSAttribute | TemplateStringsArray,
-  ...props: (string | number)[]
+  ...props: Array<string | number>
 ): GooberInstance;
 
 /**
