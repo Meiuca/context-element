@@ -24,7 +24,10 @@ export default function themedElementMixin(getter = []) {
     update(changedProperties) {
       super.update(changedProperties);
 
-      if (this.theme !== changedProperties.get('theme') || changedProperties.has('theme')) {
+      if (
+        (changedProperties.get('theme') && this.theme !== changedProperties.get('theme')) ||
+        changedProperties.has('theme')
+      ) {
         this.updateTheme();
       }
     }
