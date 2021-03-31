@@ -6,30 +6,40 @@ import { GooberInstance } from './css';
  */
 declare class ThemedElement extends LitElement {
   /**
+   * @property
+   *
    * The url of the individual theme: `https://themes.io/xmas/button`
    *
    * Or a object from window: `js#foo`
    */
   theme: string;
 
+  /**
+   * @internalProperty
+   */
   themeId: string;
 
+  /**
+   * @internalProperty
+   */
   styleIdList: string[];
 
   /**
-   * Equivalent to `styleIdList[0]`
+   * @internalProperty Equivalent to `styleIdList[0]`
    */
   styleId: string;
 
   /**
-   * @returns A promisse with the new theme
+   * @returns A promise that is resolved in a new theme
    */
   updateTheme(): Promise<unknown>;
 
   /**
-   * @returns A promisse with the new styles object
+   * @returns The new styles object
    */
-  updateStyles(): Promise<CSSResult[]>;
+  updateStyles(): CSSResult[];
+
+  protected handleSetTheme(): Promise<void>;
 }
 
 declare type GooberGetter = (themeId: string) => GooberInstance;

@@ -1,7 +1,7 @@
 {
   "name": "@meiuca/themed-element",
   "description": "A LitElement overlay to support themes",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "license": "MIT",
   "main": "src",
   "module": "src",

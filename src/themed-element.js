@@ -1,19 +1,18 @@
-import { LitElement, property } from 'lit-element';
+import { LitElement, property, internalProperty } from 'lit-element';
 import { isArray, kebabCase } from 'lodash';
-import axios from 'axios';
 import { setTheme, getComponentTheme } from './theme.js';
 
 export default function themedElementMixin(getter = []) {
-  const styleGetterList = isArray(getter) ? getter : [getter];
+  const gooberGetterList = isArray(getter) ? getter : [getter];
 
   return class ThemedElement extends LitElement {
     @property() theme = '';
 
-    themeId = this.localName;
+    @internalProperty() themeId = this.localName;
 
-    styleIdList = [''];
+    @internalProperty() styleIdList = [''];
 
-    styleId = '';
+    @internalProperty() styleId = '';
 
     constructor() {
       super();
@@ -34,23 +33,7 @@ export default function themedElementMixin(getter = []) {
 
     async updateTheme() {
       if (this.theme) {
-        if (/^js#/.test(this.theme)) {
-          const themeSubstr = this.theme.substring(3);
-
-          this.themeId = `${this.localName}__${kebabCase(themeSubstr)}`;
-
-          await setTheme(this.themeId, window[themeSubstr] || {});
-        }
-
-        if (/^htt(p|ps):\/\//.test(this.theme)) {
-          const { pathname } = new URL(this.theme);
-
-          this.themeId = `${this.localName}__${kebabCase(pathname)}`;
-
-          const { data } = await axios.get(this.theme);
-
-          await setTheme(this.themeId, data);
-        }
+        await this.handleSetTheme();
       } else {
         this.themeId = this.localName;
 
@@ -60,25 +43,41 @@ export default function themedElementMixin(getter = []) {
       return getComponentTheme(this.themeId);
     }
 
+    async handleSetTheme() {
+      if (/^js#/.test(this.theme)) {
+        const themeSubstr = this.theme.substring(3);
+
+        this.themeId = `${this.localName}__${kebabCase(themeSubstr)}`;
+
+        await setTheme(this.themeId, window[themeSubstr] || {});
+      }
+
+      if (/^htt(p|ps):\/\//.test(this.theme)) {
+        const { pathname } = new URL(this.theme);
+
+        this.themeId = `${this.localName}__${kebabCase(pathname)}`;
+
+        await setTheme(this.themeId, this.theme);
+      }
+    }
+
     async updateStyles() {
-      const mappedGetterList = styleGetterList
-        .map(g => g(this.themeId))
+      const gooberInstanceList = gooberGetterList
+        .map(gooberGetter => gooberGetter(this.themeId))
         .filter(({ id, result }) => id && result);
 
-      this.constructor._styles = mappedGetterList.reduce(
+      this.constructor._styles = gooberInstanceList.reduce(
         (prev, curr) => prev.concat([curr.result]),
         [],
       );
 
       this.constructor.styles = this.constructor._styles;
 
-      this.styleIdList = mappedGetterList.reduce((prev, curr) => prev.concat([curr.id]), []);
+      this.styleIdList = gooberInstanceList.reduce((prev, curr) => prev.concat([curr.id]), []);
 
       [this.styleId] = this.styleIdList;
 
       this.adoptStyles();
-
-      await this.requestUpdate();
 
       return this.constructor.styles;
     }
