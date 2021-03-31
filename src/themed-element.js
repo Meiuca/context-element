@@ -18,6 +18,8 @@ export default function themedElementMixin(getter = []) {
       super();
 
       window.DSRegistry?.push(this);
+
+      this.updateStyles();
     }
 
     update(changedProperties) {
