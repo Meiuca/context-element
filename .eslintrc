@@ -2,9 +2,20 @@
   "extends": ["@open-wc/eslint-config", "eslint-config-prettier"],
   "plugins": ["eslint-plugin-prettier"],
   "parser": "@babel/eslint-parser",
-  "rules": {
-    "object-curly-newline": "off",
-    "no-console": "warn"
-  },
-  "ignorePatterns": "*.d.ts"
+  "overrides": [
+    {
+      "files": ["*.test.js"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off",
+        "import/no-unresolved": "warn"
+      }
+    },
+    {
+      "files": ["server.js"],
+      "rules": {
+        "no-console": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
 }
