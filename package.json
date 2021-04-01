@@ -13,8 +13,8 @@
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
-    "format": "prettier --write \"src/**/*.js\"",
-    "lint": "prettier --check \"src/**/*.js\"",
+    "format": "prettier --write \"(src|test)/**/*.(js|d.ts)\"",
+    "lint": "prettier --check \"(src|test)/**/*.(js|d.ts)\"",
     "test": "yarn build && yarn web-test-runner",
     "eslint": "eslint --ext .js,.mjs,.html . --ignore-path .gitignore",
     "storybook": "start-storybook -p 6006",
