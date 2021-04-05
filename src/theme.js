@@ -8,7 +8,7 @@ export function getComponentTheme(component, defaultTheme = {}) {
 }
 
 export function updateRegisteredComponents() {
-  return Promise.all(window.DSRegistry?.map(async item => item.updateStyles()));
+  return window.DSRegistry?.map(item => item.updateStyles());
 }
 
 export async function setTheme(arg1, arg2) {
@@ -46,11 +46,11 @@ export async function setTheme(arg1, arg2) {
     }
   }
 
-  await updateRegisteredComponents();
+  updateRegisteredComponents();
 }
 
-export async function clearTheme() {
+export function clearTheme() {
   window.DSTheme?.clear();
 
-  await updateRegisteredComponents();
+  updateRegisteredComponents();
 }
