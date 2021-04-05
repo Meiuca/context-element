@@ -4,10 +4,10 @@ const path = require('path');
 
 const globPromise = promisify(glob);
 
-async function getFiles(pattern) {
+async function getFiles(pattern, prefix) {
   const globResult = await globPromise(pattern);
 
-  return globResult.map(item => path.basename(item));
+  return globResult.map(item => prefix + path.basename(item));
 }
 
 module.exports = {
@@ -28,8 +28,8 @@ module.exports = {
         'package-json',
         'vscode',
         // 'proposal',
-        ...(await getFiles('./src/**/*.js')),
-        ...(await getFiles('./test/**/*.js')),
+        ...(await getFiles('./src/**/*.js', 'src#')),
+        ...(await getFiles('./test/**/*.js', 'test#')),
       ],
     ],
   },
