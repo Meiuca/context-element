@@ -24,5 +24,11 @@ declare global {
   interface Window {
     DSTheme?: Map<string, any>;
     DSRegistry?: Array<ThemedElement>;
+    /**
+     * This is a global module declaration
+     * that will only exist if you import
+     * `@meiuca/themed-element/module-declaration.js`
+     */
+    ThemedElement?: typeof import('./index');
   }
 }
