@@ -39,7 +39,7 @@ declare class ThemedElement extends LitElement {
    */
   updateStyles(): CSSResult[];
 
-  protected handleSetTheme(): Promise<void>;
+  protected handleUpdateTheme(): Promise<void>;
 }
 
 declare type GooberGetter = (themeId: string) => GooberInstance;

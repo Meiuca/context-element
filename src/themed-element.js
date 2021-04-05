@@ -35,7 +35,7 @@ export default function themedElementMixin(getter = []) {
 
     async updateTheme() {
       if (this.theme) {
-        await this.handleSetTheme();
+        await this.handleUpdateTheme();
       } else {
         this.themeId = this.localName;
 
@@ -45,7 +45,7 @@ export default function themedElementMixin(getter = []) {
       return getComponentTheme(this.themeId);
     }
 
-    async handleSetTheme() {
+    async handleUpdateTheme() {
       if (/^js#/.test(this.theme)) {
         const themeSubstr = this.theme.substring(3);
 
