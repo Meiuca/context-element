@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const server = require('express')();
 const cors = require('cors');
 
