@@ -4,6 +4,8 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   files: 'test/**/*.test.js',
   nodeResolve: true,
 
+  hostname: '127.0.0.1',
+
   /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
   // esbuildTarget: 'auto',
 
