@@ -17,8 +17,6 @@
     "lint": "prettier --check \"(src|test)/**/*.(js|d.ts)\"",
     "test": "yarn build && yarn web-test-runner",
     "eslint": "eslint --ext .js,.mjs,.html . --ignore-path .gitignore",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -57,6 +55,7 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "husky": "^6.0.0",
+    "localtunnel": "^2.0.1",
     "prettier": "^2.0.5",
     "rollup": "^2.44.0",
     "sinon": "^10.0.0",
