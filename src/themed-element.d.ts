@@ -42,7 +42,14 @@ declare class ThemedElement extends LitElement {
   protected handleUpdateTheme(): Promise<void>;
 }
 
-declare type GooberGetter = (themeId: string) => GooberInstance;
+declare interface GooberGetter {
+  (themeId: string): GooberInstance;
+
+  /**
+   * @returns The goober automagically generated class. Must be placed in the classList
+   */
+  reactify: (themeId: string) => string;
+}
 
 export default function themedElementMixin(
   getter?: GooberGetter | GooberGetter[],

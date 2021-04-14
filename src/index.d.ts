@@ -27,7 +27,7 @@ declare global {
     /**
      * This is a global module declaration
      * that will only exist if you import
-     * `@meiuca/themed-element/module-declaration.js`
+     * `@meiuca/themed-element/src/module-declaration.js`
      */
     ThemedElement?: typeof import('./index');
   }
