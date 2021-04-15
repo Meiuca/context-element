@@ -1,3 +1,3 @@
-import * as ThemedElement from './index.js';
+import * as ContextElement from './index.js';
 
-window.ThemedElement = ThemedElement;
+window.ContextElement = ContextElement;

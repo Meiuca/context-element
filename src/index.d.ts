@@ -1,9 +1,9 @@
-import { ThemedElement } from './themed-element';
+import { ContextElement } from './context-element';
 
 export * from './global-props';
 export * from './css';
-export * from './theme';
-export { default as themedElementMixin, GooberGetter, ThemedElement } from './themed-element';
+export * from './context';
+export { default as contextElementMixin, GooberGetter, ContextElement } from './context-element';
 export {
   html,
   svg,
@@ -22,13 +22,13 @@ export {
 
 declare global {
   interface Window {
-    DSTheme?: Map<string, any>;
-    DSRegistry?: Array<ThemedElement>;
+    DSContext?: Map<string, any>;
+    DSRegistry?: Array<ContextElement>;
     /**
      * This is a global module declaration
      * that will only exist if you import
-     * `@meiuca/themed-element/src/module-declaration.js`
+     * `@meiuca/context-element/src/module-declaration.js`
      */
-    ThemedElement?: typeof import('./index');
+    ContextElement?: typeof import('./index');
   }
 }

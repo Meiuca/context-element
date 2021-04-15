@@ -4,20 +4,20 @@ import { GooberInstance } from './css';
 /**
  * This class is just a TypeScript declaration. The actual code does not export it.
  */
-declare class ThemedElement extends LitElement {
+declare class ContextElement extends LitElement {
   /**
    * @property
    *
-   * The url of the individual theme: `https://themes.io/xmas/button`
+   * The url of the individual context: `https://contexts.io/xmas/button`
    *
-   * Or a object from window: `js#foo`
+   * Or a object from window: `js#button`
    */
-  theme: string;
+  context: string;
 
   /**
    * @internalProperty
    */
-  themeId: string;
+  contextId: string;
 
   /**
    * @internalProperty
@@ -30,27 +30,27 @@ declare class ThemedElement extends LitElement {
   styleId: string;
 
   /**
-   * @returns A promise that is resolved in a new theme
+   * @returns A promise that is resolved in a new context
    */
-  updateTheme(): Promise<unknown>;
+  updateContext(): Promise<unknown>;
 
   /**
    * @returns The new styles object
    */
   updateStyles(): CSSResult[];
 
-  protected handleUpdateTheme(): Promise<void>;
+  protected handleUpdateContext(): Promise<void>;
 }
 
 declare interface GooberGetter {
-  (themeId: string): GooberInstance;
+  (contextId: string): GooberInstance;
 
   /**
    * @returns The goober automagically generated class. Must be placed in the classList
    */
-  reactify: (themeId: string) => string;
+  reactify: (contextId: string) => string;
 }
 
-export default function themedElementMixin(
+export default function contextElementMixin(
   getter?: GooberGetter | GooberGetter[],
-): typeof ThemedElement;
+): typeof ContextElement;

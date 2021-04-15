@@ -1,6 +1,6 @@
 import { CSSAttribute } from 'goober';
 import { CSSResult } from 'lit-element';
-import { GooberGetter } from './themed-element';
+import { GooberGetter } from './context-element';
 
 declare interface GooberInstance {
   id: string;

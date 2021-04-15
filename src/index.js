@@ -1,7 +1,7 @@
 export * from './global-props.js';
 export * from './css.js';
-export * from './theme.js';
-export { default as themedElementMixin } from './themed-element.js';
+export * from './context.js';
+export { default as contextElementMixin } from './context-element.js';
 export {
   html,
   svg,

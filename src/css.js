@@ -1,6 +1,6 @@
 import { css as goCSS, extractCss } from 'goober';
 import { unsafeCSS } from 'lit-element';
-import { getComponentTheme } from './theme.js';
+import { getComponentContext } from './context.js';
 
 const wrapper = document.createElement('div');
 const _css = goCSS.bind({ target: wrapper });
@@ -14,12 +14,12 @@ export function createGooberGetter(tag, ...props) {
     throw new Error(`typeof props[0] is '${typeof props[0]}'; must be 'object'`);
   }
 
-  const gooberGetter = componentThemeId => {
-    const theme = getComponentTheme(componentThemeId, props[0]);
+  const gooberGetter = componentContextId => {
+    const context = getComponentContext(componentContextId, props[0]);
 
     const transformedProps = props.map(prop => {
       if (typeof prop === 'function') {
-        return prop(theme);
+        return prop(context);
       }
 
       if (typeof prop === 'string' || typeof prop === 'number') {
@@ -37,13 +37,13 @@ export function createGooberGetter(tag, ...props) {
     return css(cssText);
   };
 
-  const reactify = componentThemeId => {
-    let externalStylesTag = document.head.querySelector('#__themed-element');
+  const reactify = componentContextId => {
+    let externalStylesTag = document.head.querySelector('#__context-element');
 
     if (!externalStylesTag) {
       const externalStyles = document.createElement('style');
 
-      externalStyles.id = '__themed-element';
+      externalStyles.id = '__context-element';
       externalStyles.innerHTML = '';
 
       document.head.appendChild(externalStyles);
@@ -51,7 +51,7 @@ export function createGooberGetter(tag, ...props) {
       externalStylesTag = externalStyles;
     }
 
-    const { id, result } = gooberGetter(componentThemeId);
+    const { id, result } = gooberGetter(componentContextId);
 
     externalStylesTag.innerHTML += `${result.cssText}\n\n\n`;
 

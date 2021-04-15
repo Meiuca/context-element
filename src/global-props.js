@@ -2,8 +2,8 @@ if (!window.DSRegistry) {
   window.DSRegistry = [];
 }
 
-if (!window.DSTheme) {
-  window.DSTheme = new Map();
+if (!window.DSContext) {
+  window.DSContext = new Map();
 }
 
 export function clearDSRegistry() {
