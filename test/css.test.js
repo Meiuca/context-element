@@ -35,7 +35,7 @@ describe('css.js', () => {
 
     expect(cssReturn.reactify('test')).to.be.a('string');
 
-    const globalStyles = document.querySelector('#__themed-element');
+    const globalStyles = document.querySelector('#__context-element');
 
     expect(globalStyles).to.be.an.instanceof(HTMLElement, 'the global styles is not being created');
   });

@@ -6,8 +6,8 @@ describe('global-props.js', () => {
     expect(window).to.have.property('DSRegistry').that.is.instanceOf(Array);
   });
 
-  it('should create DSTheme global object', () => {
-    expect(window).to.have.property('DSTheme').that.is.instanceOf(Map);
+  it('should create DSContext global object', () => {
+    expect(window).to.have.property('DSContext').that.is.instanceOf(Map);
   });
 
   it('clearDSRegistry function should clear the DSRegistry', () => {
