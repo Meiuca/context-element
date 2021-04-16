@@ -14,6 +14,8 @@ export default function contextElementMixin(getter = []) {
 
     @internalProperty() styleId = '';
 
+    @internalProperty() allowTransitions = true;
+
     constructor() {
       super();
 
@@ -64,6 +66,12 @@ export default function contextElementMixin(getter = []) {
     }
 
     async updateStyles() {
+      this.allowTransitions = false;
+
+      setTimeout(() => {
+        this.allowTransitions = true;
+      });
+
       const gooberInstanceList = gooberGetterList
         .map(gooberGetter => gooberGetter(this.contextId))
         .filter(({ id, result }) => id && result);

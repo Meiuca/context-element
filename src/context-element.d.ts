@@ -40,6 +40,31 @@ declare class ContextElement extends LitElement {
   updateStyles(): CSSResult[];
 
   protected handleUpdateContext(): Promise<void>;
+
+  /**
+   * It is set to `false` when `updateStyles` is called, and true after the style is updated.
+   * If your element uses transitions, you should use this property as a control,
+   * since the transitions tend to glitch the element during the update.
+   *
+   * Initial value: `true`
+   *
+   * Example:
+   *
+   * ```js
+   * render() {
+   *  const { allowTransitions } = this;
+   *
+   *  const transitions = allowTransitions ? 'transitions-enabled' : '';
+   *
+   *  return html`
+   *    <div class="${transitions}">
+   *    ...
+   *    </div>
+   *  `;
+   * }
+   * ```
+   * */
+  allowTransitions: boolean;
 }
 
 declare interface GooberGetter {
