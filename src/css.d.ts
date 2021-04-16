@@ -23,7 +23,7 @@ export function css(
  *
  * ```js
  * import defaultButtonTheme from './my-default-button-theme';
- * import { createGooberGetter as css } from '@meiuca/themed-element';
+ * import { createGooberGetter as css } from '@meiuca/context-element';
  *
  * export css`
  * ${defaultButtonTheme}
