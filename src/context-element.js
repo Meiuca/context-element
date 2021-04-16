@@ -104,5 +104,13 @@ export default function contextElementMixin(getter = []) {
 
       this.adoptStyles();
     }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      const selfRegistrationIndex = window.DSRegistry?.indexOf(this);
+
+      if (selfRegistrationIndex >= 0) window.DSRegistry?.splice(selfRegistrationIndex, 1);
+    }
   };
 }
