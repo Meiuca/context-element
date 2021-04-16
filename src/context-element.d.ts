@@ -29,15 +29,9 @@ declare class ContextElement extends LitElement {
    */
   styleId: string;
 
-  /**
-   * @returns A promise that is resolved in a new context
-   */
-  updateContext(): Promise<unknown>;
+  updateContext(): Promise<void>;
 
-  /**
-   * @returns The new styles object
-   */
-  updateStyles(): CSSResult[];
+  updateStyles(): void;
 
   protected handleUpdateContext(): Promise<void>;
 
@@ -65,12 +59,16 @@ declare class ContextElement extends LitElement {
    * ```
    * */
   allowTransitions: boolean;
+
+  static gooberGetterList: Array<GooberGetter>;
 }
 
 declare interface GooberGetter {
   (contextId: string): GooberInstance;
 
   /**
+   * Pushes the CSSResult to the DOM
+   *
    * @returns The goober automagically generated class. Must be placed in the classList
    */
   reactify: (contextId: string) => string;
