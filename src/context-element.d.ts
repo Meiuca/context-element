@@ -1,5 +1,5 @@
 import { CSSResult, LitElement } from 'lit-element';
-import { GooberInstance } from './css';
+import { StyleInstance, StyleGetter } from './css';
 
 /**
  * This class is just a TypeScript declaration. The actual code does not export it.
@@ -60,20 +60,9 @@ declare class ContextElement extends LitElement {
    * */
   allowTransitions: boolean;
 
-  static gooberGetterList: Array<GooberGetter>;
-}
-
-declare interface GooberGetter {
-  (contextId: string): GooberInstance;
-
-  /**
-   * Pushes the CSSResult to the DOM
-   *
-   * @returns The goober automagically generated class. Must be placed in the classList
-   */
-  reactify: (contextId: string) => string;
+  private static _styleGetterArray: Array<StyleGetter>;
 }
 
 export default function contextElementMixin(
-  getter?: GooberGetter | GooberGetter[],
+  getter?: StyleGetter | Array<StyleGetter>,
 ): typeof ContextElement;

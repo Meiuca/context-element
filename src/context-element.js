@@ -1,5 +1,5 @@
 import { LitElement, property, internalProperty } from 'lit-element';
-import { isArray, kebabCase } from 'lodash';
+import { isArray, kebabCase, has } from 'lodash';
 import { setContext } from './context.js';
 
 /**
@@ -29,7 +29,7 @@ export default function contextElementMixin(getter = []) {
 
     @internalProperty() allowTransitions = true;
 
-    static gooberGetterList = isArray(getter) ? getter : [getter];
+    static _styleGetterArray = isArray(getter) ? getter : [getter];
 
     constructor() {
       super();
@@ -88,17 +88,17 @@ export default function contextElementMixin(getter = []) {
       /**
        * @type {typeof import('./context-element').ContextElement}
        */
-      const { gooberGetterList } = this.constructor;
+      const { _styleGetterArray } = this.constructor;
 
-      const gooberInstanceList = gooberGetterList
-        .map(gooberGetter => gooberGetter(this.contextId))
-        .filter(({ id, result }) => id && result);
+      const styleArray = _styleGetterArray
+        .map(styleGetter => styleGetter(this.contextId))
+        .filter(style => has(style, 'id') && has(style, 'result'));
 
-      this.constructor._styles = concatProperties(gooberInstanceList, 'result');
+      this.constructor._styles = concatProperties(styleArray, 'result');
 
       this.constructor.styles = this.constructor._styles;
 
-      this.styleIdList = concatProperties(gooberInstanceList, 'id');
+      this.styleIdList = concatProperties(styleArray, 'id');
 
       [this.styleId] = this.styleIdList;
 
