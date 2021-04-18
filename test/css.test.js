@@ -31,9 +31,9 @@ describe('css.js', () => {
       .that.have.property('cssText')
       .that.is.a('string');
 
-    expect(cssReturn.reactify).to.be.a('function');
+    expect(cssReturn.extract).to.be.a('function');
 
-    expect(cssReturn.reactify('test')).to.be.a('string');
+    expect(cssReturn.extract('test')).to.be.a('string');
 
     const globalStyles = document.querySelector('#__context-element');
 
