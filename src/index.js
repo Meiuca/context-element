@@ -16,4 +16,6 @@ export {
   queryAssignedNodes,
   queryAsync,
   supportsAdoptingStyleSheets,
+  css as litElementCSS,
+  unsafeCSS as litElementUnsafeCSS,
 } from 'lit-element';
