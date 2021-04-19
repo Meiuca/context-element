@@ -55,12 +55,19 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "husky": "^6.0.0",
+    "nodegit": "^0.27.0",
     "prettier": "^2.0.5",
     "rollup": "^2.44.0",
     "sinon": "^10.0.0",
     "snowpack": "^3.1.2"
   },
-  "peerDependencies": {
-    "nodegit": "^0.27.0"
+  "peerDependencies": {},
+  "huskyController": {
+    "commands": [
+      "yarn lint",
+      "yarn eslint",
+      "yarn test"
+    ],
+    "mainFolders": "test|src"
   }
 }
