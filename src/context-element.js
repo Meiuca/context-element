@@ -78,7 +78,7 @@ export default function contextElementMixin(getter = []) {
       }
     }
 
-    async updateStyles() {
+    updateStyles() {
       this.allowTransitions = false;
 
       setTimeout(() => {
