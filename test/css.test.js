@@ -2,7 +2,7 @@ import { expect } from '@open-wc/testing';
 import { css, createGooberGetter } from '../build/src/css.js';
 
 describe('css.js', () => {
-  it('css function should return an GooberInstance', () => {
+  it('css function should return an StyleInstance', () => {
     const cssReturn = css``;
 
     expect(cssReturn).to.have.property('id').that.is.a('string');
@@ -20,7 +20,7 @@ describe('css.js', () => {
     );
   });
 
-  it('createGooberGetter function should return a GooberGetter', () => {
+  it('createGooberGetter function should return a StyleGetter', () => {
     const cssReturn = createGooberGetter`${{}}`;
 
     expect(cssReturn()).to.have.property('id').that.is.a('string');
