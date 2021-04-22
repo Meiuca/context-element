@@ -1,14 +1,15 @@
 import { merge, cloneDeep } from 'lodash';
 import axios from 'axios';
 
-export function getComponentContext(component, defaultContext = {}) {
-  const componentCurrentContext = window.DSContext?.get(component) || {};
+export function getComponentContext(contextId, defaultContext = {}) {
+  const componentCurrentContext = window.DSContext?.get(contextId) || {};
 
+  // Clone parameter to avoid reassignment
   return merge(cloneDeep(defaultContext), componentCurrentContext);
 }
 
 export function updateRegisteredComponents() {
-  return window.DSRegistry?.map(item => item.updateStyles());
+  window.DSRegistry?.map(item => item.updateStyles());
 }
 
 export async function setContext(arg1, arg2) {

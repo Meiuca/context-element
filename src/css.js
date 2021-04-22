@@ -2,6 +2,9 @@ import { css as gooberCSS, extractCss } from 'goober';
 import { unsafeCSS } from 'lit-element';
 import { getComponentContext } from './context.js';
 
+// ALL ITEMS STARTED WITH `_` ARE EXPLICITLY PRIVATE
+
+// Change goober target to a private element
 const _wrapper = document.createElement('div');
 const _bindedGooberCSS = gooberCSS.bind({ target: _wrapper });
 
@@ -16,6 +19,7 @@ function _litCss(value) {
   return { id: '', result: unsafeCSS(value) };
 }
 
+// Pushes the style obtained by `bindedGetter` to the DOM
 function _extract(componentContextId) {
   const { bindedGetter } = this;
 
@@ -23,7 +27,6 @@ function _extract(componentContextId) {
 
   if (!externalStylesTag) {
     const externalStyles = document.createElement('style');
-
     externalStyles.id = '__context-element';
     externalStyles.innerHTML = '';
 
@@ -39,8 +42,9 @@ function _extract(componentContextId) {
 
   const { innerHTML } = externalStylesTag;
 
-  if ((id && !innerHTML.includes(id)) || !innerHTML.includes(cssText))
+  if ((id && !innerHTML.includes(id)) || !innerHTML.includes(cssText)) {
     externalStylesTag.innerHTML += `\n${cssText}\n`;
+  }
 
   return id;
 }
@@ -53,11 +57,7 @@ function _getter(tag, props, cssFn, componentContextId) {
       return prop(context);
     }
 
-    if (typeof prop === 'string' || typeof prop === 'number') {
-      return prop;
-    }
-
-    return '';
+    return prop;
   });
 
   const interpolate = (prev, curr, idx) => prev + curr + tag[idx + 1];
@@ -65,6 +65,18 @@ function _getter(tag, props, cssFn, componentContextId) {
   const cssText = transformedProps.reduce(interpolate, tag[0]);
 
   return cssFn(cssText);
+}
+
+function _gooberGetter(componentContextId) {
+  const { tag, props } = this;
+
+  return _getter(tag, props, css, componentContextId);
+}
+
+function _litGetter(componentContextId) {
+  const { tag, props } = this;
+
+  return _getter(tag, props, _litCss, componentContextId);
 }
 
 function _createGetterObj(getter, tag, props) {
@@ -80,18 +92,6 @@ function _createGetterObj(getter, tag, props) {
   bindedGetter.reactify = bindedGetter.extract;
 
   return bindedGetter;
-}
-
-function _gooberGetter(componentContextId) {
-  const { tag, props } = this;
-
-  return _getter(tag, props, css, componentContextId);
-}
-
-function _litGetter(componentContextId) {
-  const { tag, props } = this;
-
-  return _getter(tag, props, _litCss, componentContextId);
 }
 
 function createGooberGetter(tag, ...props) {

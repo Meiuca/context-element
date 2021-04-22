@@ -3,7 +3,10 @@ import { isArray, kebabCase, has } from 'lodash';
 import { setContext } from './context.js';
 
 /**
- * @template {any[]} P
+ * Transforms an array of objects into an array
+ * of common items among the objects in the array, determined by `propName`
+ *
+ * @template {({})[]} P
  * @template {keyof P[0]} S
  * @param {P} array
  * @param {S} propName
@@ -34,14 +37,19 @@ export default function contextElementMixin(getter = []) {
     constructor() {
       super();
 
+      // Register itself when instantiated
       window.DSRegistry?.push(this);
 
+      // First update in the life cycle.
+      // It needs to be done when the object is instantiated
+      // to adopt the styles during initialization
       this.updateStyles();
     }
 
     update(changedProperties) {
       super.update(changedProperties);
 
+      // Add support for changes to the context id pointer
       if (
         (changedProperties.get('context') && this.context !== changedProperties.get('context')) ||
         changedProperties.has('context')
@@ -52,8 +60,12 @@ export default function contextElementMixin(getter = []) {
 
     async updateContext() {
       if (this.context) {
+        // In this case `this.updateStyles` does not need to be called
+        // because `setContext` already does
+
         await this.handleUpdateContext();
       } else {
+        // Reset contextId
         this.contextId = this.localName;
 
         await this.updateStyles();
@@ -62,6 +74,7 @@ export default function contextElementMixin(getter = []) {
 
     async handleUpdateContext() {
       if (/^js#/.test(this.context)) {
+        // Take whatever is after `js#`
         const contextSubstr = this.context.substring(3);
 
         this.contextId = `${this.localName}__${kebabCase(contextSubstr)}`;
@@ -79,8 +92,11 @@ export default function contextElementMixin(getter = []) {
     }
 
     updateStyles() {
+      // Set `this.allowTransitions` to false to avoid glitches.
+      // For this change to take effect, this property needs to be properly implemented
       this.allowTransitions = false;
 
+      // Set `this.allowTransitions` to true after all changes have been made
       setTimeout(() => {
         this.allowTransitions = true;
       });
@@ -96,6 +112,8 @@ export default function contextElementMixin(getter = []) {
 
       this.constructor._styles = concatProperties(styleArray, 'result');
 
+      // Match the value of `_styles` and `styles`,
+      // since `_styles` is the private version of `styles`
       this.constructor.styles = this.constructor._styles;
 
       this.styleIdList = concatProperties(styleArray, 'id');
@@ -105,6 +123,7 @@ export default function contextElementMixin(getter = []) {
       this.adoptStyles();
     }
 
+    // Remove itself from registry when removed from the DOM
     disconnectedCallback() {
       super.disconnectedCallback();
 
