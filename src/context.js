@@ -18,11 +18,11 @@ export async function setContext(arg1, arg2) {
   if (typeof arg1 === 'string' && !arg2) {
     const { data } = await axios.get(arg1);
 
-    for (const item of Object.entries(data)) {
+    Object.entries(data).forEach(item => {
       const newContext = merge(window.DSContext.get(item[0]) || {}, item[1]);
 
       window.DSContext.set(item[0], newContext);
-    }
+    });
   }
 
   if (typeof arg1 === 'string' && typeof arg2 === 'object') {
@@ -40,11 +40,11 @@ export async function setContext(arg1, arg2) {
   }
 
   if (typeof arg1 === 'object') {
-    for (const item of Object.entries(arg1)) {
+    Object.entries(arg1).forEach(item => {
       const newContext = merge(window.DSContext.get(item[0]) || {}, item[1]);
 
       window.DSContext.set(item[0], newContext);
-    }
+    });
   }
 
   updateRegisteredComponents();
