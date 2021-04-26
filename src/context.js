@@ -2,48 +2,71 @@ import { merge, cloneDeep } from 'lodash';
 import axios from 'axios';
 
 export function getComponentContext(contextId, defaultContext = {}) {
-  const componentCurrentContext = window.DSContext?.get(contextId) || {};
+  if (!window.DSContext) {
+    throw new Error('DSContext is not defined');
+  }
+
+  const componentCurrentContext = window.DSContext.get(contextId) || {};
 
   // Clone parameter to avoid reassignment
   return merge(cloneDeep(defaultContext), componentCurrentContext);
 }
 
 export function updateRegisteredComponents() {
-  window.DSRegistry?.map(item => item.updateStyles());
+  if (!window.DSContext) {
+    throw new Error('DSContext is not defined');
+  }
+
+  // TODO: find a more performative way to update
+  window.DSRegistry.forEach(component => component.updateStyles());
 }
 
 export async function setContext(arg1, arg2) {
-  if (!window.DSContext) return;
+  if (!window.DSContext) {
+    throw new Error('DSContext is not defined');
+  }
 
+  // Set global context using a url
   if (typeof arg1 === 'string' && !arg2) {
     const { data } = await axios.get(arg1);
 
-    Object.entries(data).forEach(item => {
-      const newContext = merge(window.DSContext.get(item[0]) || {}, item[1]);
+    Object.entries(data).forEach(([componentId, newComponentContext]) => {
+      const oldComponentContext = window.DSContext.get(componentId) || {};
 
-      window.DSContext.set(item[0], newContext);
+      const newContext = merge(oldComponentContext, newComponentContext);
+
+      window.DSContext.set(componentId, newContext);
     });
   }
 
+  // Set component context using a object
   if (typeof arg1 === 'string' && typeof arg2 === 'object') {
-    const newContext = merge(window.DSContext.get(arg1) || {}, arg2);
+    const oldComponentContext = window.DSContext.get(arg1) || {};
+
+    const newContext = merge(oldComponentContext, arg2);
 
     window.DSContext.set(arg1, newContext);
   }
 
+  // Set component context using a url
   if (typeof arg1 === 'string' && typeof arg2 === 'string') {
-    const { data } = await axios.get(arg2);
+    const { data: newComponentContext } = await axios.get(arg2);
 
-    const newContext = merge(window.DSContext.get(arg1) || {}, data);
+    const oldComponentContext = window.DSContext.get(arg1) || {};
+
+    const newContext = merge(oldComponentContext, newComponentContext);
 
     window.DSContext.set(arg1, newContext);
   }
 
+  // Set global context using a object
   if (typeof arg1 === 'object') {
-    Object.entries(arg1).forEach(item => {
-      const newContext = merge(window.DSContext.get(item[0]) || {}, item[1]);
+    Object.entries(arg1).forEach(([componentId, newComponentContext]) => {
+      const oldComponentContext = window.DSContext.get(componentId) || {};
 
-      window.DSContext.set(item[0], newContext);
+      const newContext = merge(oldComponentContext, newComponentContext);
+
+      window.DSContext.set(componentId, newContext);
     });
   }
 
@@ -51,15 +74,19 @@ export async function setContext(arg1, arg2) {
 }
 
 export function clearContext(contextId) {
+  if (!window.DSContext) {
+    throw new Error('DSContext is not defined');
+  }
+
   if (typeof contextId === 'string') {
-    const deleted = window.DSContext?.delete(contextId);
+    const deleted = window.DSContext.delete(contextId);
 
     if (deleted) updateRegisteredComponents();
 
     return deleted;
   }
 
-  window.DSContext?.clear();
+  window.DSContext.clear();
 
   updateRegisteredComponents();
 
