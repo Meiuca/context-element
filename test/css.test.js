@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { css, createGooberGetter } from '../build/src/css.js';
+import { css, createGooberGetter } from '../build/src/index.js';
 
 describe('css.js', () => {
   it('css function should return an StyleInstance', () => {
