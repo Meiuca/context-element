@@ -6,7 +6,7 @@ import { StyleInstance, StyleGetter } from './css';
  */
 declare class ContextElement extends LitElement {
   /**
-   * @property
+   * @property Initial value: `''`
    *
    * The url of the individual context: `https://contexts.io/xmas/button`
    *
@@ -15,12 +15,12 @@ declare class ContextElement extends LitElement {
   context: string;
 
   /**
-   * @internalProperty
+   * @internalProperty Initial value: same as `this.localName`
    */
   contextId: string;
 
   /**
-   * @internalProperty
+   * @internalProperty Initial value: `['']`
    */
   styleIdList: string[];
 
@@ -36,11 +36,11 @@ declare class ContextElement extends LitElement {
   protected handleUpdateContext(): Promise<void>;
 
   /**
+   * @internalProperty  Initial value: `true`
+   *
    * It is set to `false` when `updateStyles` is called, and true after the style is updated.
    * If your element uses transitions, you should use this property as a control,
    * since the transitions tend to glitch the element during the update.
-   *
-   * Initial value: `true`
    *
    * Example:
    *
@@ -61,6 +61,16 @@ declare class ContextElement extends LitElement {
   allowTransitions: boolean;
 
   private static _styleGetterArray: Array<StyleGetter>;
+
+  /**
+   * LitElement:
+   * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
+   * when disconnecting at some point in the future.
+   *
+   * ContextElement:
+   * - Remove itself from registry when removed from the DOM
+   */
+  disconnectedCallback(): void;
 }
 
 export default function contextElementMixin(

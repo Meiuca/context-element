@@ -24,11 +24,16 @@ declare interface StyleGetter {
 
 declare type ContextPropGetter<Context> = (context: Context) => string | number;
 
-declare type CreateStyleGetterProps<Context> = Array<
-  ContextPropGetter<Context> | string | number
-> & {
+/**
+ * Array whose first item is an object and the rest can be of type string, number or function.
+ * Functions will be used internally as a callback that receives, as first and only parameter,
+ * an object with structure equal to the first item in the array
+ * but containing different values ​​(or not, depending on the use case) and must return string or number.
+ */
+declare interface CreateStyleGetterProps<Context extends Object>
+  extends Array<ContextPropGetter<Context> | string | number> {
   0: Context;
-};
+}
 
 /**
  * Encapsulates [Goober](https://github.com/cristianbote/goober)
@@ -40,9 +45,9 @@ export function css(
 ): StyleInstance;
 
 /**
- * Creates a dinamic style getter using [goober](https://github.com/cristianbote/goober)
+ * Creates a dinamic style getter using [Goober](https://github.com/cristianbote/goober)
  *
- * This function supports Scss syntax
+ * - This function supports Scss syntax
  *
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';
@@ -69,7 +74,9 @@ export function createGooberGetter<DefaultContext>(
 /**
  * Creates a dinamic style getter using LitElement `unsafeCSS`.
  *
- * This function does *not* support Scss syntax
+ * - This function does *not* support Scss syntax.
+ *
+ * - This function should save a few milliseconds per call compared to `createGooberGetter`
  *
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';

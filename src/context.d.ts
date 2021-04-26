@@ -16,14 +16,14 @@ export function updateRegisteredComponents(): void;
 export function clearContext(contextId?: string): boolean;
 
 /**
- * Set the global context using a url
+ * Set global context using a url
  *
  * @param url `https://url.to.global.context/`
  */
 export function setContext(url: string): Promise<void>;
 
 /**
- * Set a component context
+ * Set component context using a object
  *
  * @param id The component context id.
  * Initially is the same as the component tag name,
@@ -34,7 +34,7 @@ export function setContext(url: string): Promise<void>;
 export function setContext(id: string, value: any): Promise<void>;
 
 /**
- * Set a component context using a url
+ * Set component context using a url
  *
  * @param id The component context id.
  * Initially it is the same as the component tag name,
@@ -45,6 +45,6 @@ export function setContext(id: string, value: any): Promise<void>;
 export function setContext(id: string, url: string): Promise<void>;
 
 /**
- * Set the global context using a object
+ * Set global context using a object
  */
 export function setContext(context: ContextRegistry): Promise<void>;
