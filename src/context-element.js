@@ -6,14 +6,14 @@ import { setContext } from './context.js';
  * Transforms an array of objects into an array
  * of common items among the objects in the array, determined by `propName`
  *
- * @template {({})[]} P
- * @template {keyof P[0]} S
- * @param {P} array
- * @param {S} propName
+ * @template {({})[]} TArray
+ * @template {keyof TArray[0]} TPropName
+ * @param {TArray} array
+ * @param {TPropName} propName
  *
- * @returns {Array<P[0][S]>}
+ * @returns {Array<TArray[0][TPropName]>}
  */
-function concatProperties(array, propName) {
+function _concatProperties(array, propName) {
   const propConcatCallback = (previousValue, currentValue) =>
     previousValue.concat([currentValue[propName]]);
 
@@ -46,12 +46,20 @@ export default function contextElementMixin(getter = []) {
       this.updateStyles();
     }
 
+    /**
+     * Updates the element. This method reflects property values to attributes and calls render to render DOM via lit-html.
+     * Setting properties inside this method will not trigger another update.
+     *
+     * @param {Map<string, unknown>} changedProperties Map of changed properties with old values
+     */
     update(changedProperties) {
       super.update(changedProperties);
 
       // Add support for changes to the context id pointer
       if (
+        // Check if `this.context` is truthy and was changed
         (changedProperties.get('context') && this.context !== changedProperties.get('context')) ||
+        // First update or `this.context` has been reset
         changedProperties.has('context')
       ) {
         this.updateContext();
@@ -61,14 +69,14 @@ export default function contextElementMixin(getter = []) {
     async updateContext() {
       if (this.context) {
         // In this case `this.updateStyles` does not need to be called
-        // because `setContext` already does
+        // because `setContext` [line 90,99] already does
 
         await this.handleUpdateContext();
       } else {
         // Reset contextId
         this.contextId = this.localName;
 
-        await this.updateStyles();
+        this.updateStyles();
       }
     }
 
@@ -83,6 +91,7 @@ export default function contextElementMixin(getter = []) {
       }
 
       if (/^htt(p|ps):\/\//.test(this.context)) {
+        // Take whatever is after `https://.../`
         const { pathname } = new URL(this.context);
 
         this.contextId = `${this.localName}__${kebabCase(pathname)}`;
@@ -110,20 +119,27 @@ export default function contextElementMixin(getter = []) {
         .map(styleGetter => styleGetter(this.contextId))
         .filter(style => has(style, 'id') && has(style, 'result'));
 
-      this.constructor._styles = concatProperties(styleArray, 'result');
+      this.constructor._styles = _concatProperties(styleArray, 'result');
 
       // Match the value of `_styles` and `styles`,
       // since `_styles` is the private version of `styles`
       this.constructor.styles = this.constructor._styles;
 
-      this.styleIdList = concatProperties(styleArray, 'id');
+      this.styleIdList = _concatProperties(styleArray, 'id');
 
       [this.styleId] = this.styleIdList;
 
       this.adoptStyles();
     }
 
-    // Remove itself from registry when removed from the DOM
+    /**
+     * LitElement:
+     * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
+     * when disconnecting at some point in the future.
+     *
+     * ContextElement:
+     * - Remove itself from registry when removed from the DOM
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
 
