@@ -156,7 +156,12 @@ function _createGetterObj(getter, tag, props) {
   bindedGetter.extract = _extract.bind({ bindedGetter });
 
   // DEPRECATED
-  bindedGetter.reactify = bindedGetter.extract;
+  bindedGetter.reactify = componentContextId => {
+    // eslint-disable-next-line no-console
+    console.warn(new Error('function reactify is deprecated'));
+
+    return bindedGetter.extract(componentContextId);
+  };
 
   return bindedGetter;
 }
