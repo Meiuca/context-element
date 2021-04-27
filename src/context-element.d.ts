@@ -1,4 +1,4 @@
-import { CSSResult, LitElement } from 'lit-element';
+import { CSSResult, LitElement, CSSResultOrNative, CSSResultArray } from 'lit-element';
 import { StyleInstance, StyleGetter } from './css';
 
 export class ContextElement extends LitElement {
@@ -59,7 +59,17 @@ export class ContextElement extends LitElement {
 
   private static _styleGetterArray: Array<StyleGetter>;
 
+  /**
+   * Array of style getters to apply to the element. The getters should be defined
+   * using the `createGooberGetter` or `createLitGetter` tag function.
+   */
   static styleGetter?: StyleGetter | Array<StyleGetter>;
+
+  /**
+   * Array of styles to apply to the element. The styles should be defined
+   * using the [[`litElementCSS`]] tag function.
+   */
+  static styles?: CSSResultOrNative | CSSResultArray;
 
   /**
    * LitElement:
