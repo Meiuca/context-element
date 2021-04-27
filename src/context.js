@@ -13,8 +13,8 @@ export function getComponentContext(contextId, defaultContext = {}) {
 }
 
 export function updateRegisteredComponents() {
-  if (!window.DSContext) {
-    throw new Error('DSContext is not defined');
+  if (!window.DSRegistry) {
+    throw new Error('DSRegistry is not defined');
   }
 
   // TODO: find a more performative way to update
