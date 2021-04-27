@@ -1,10 +1,7 @@
 import { CSSResult, LitElement } from 'lit-element';
 import { StyleInstance, StyleGetter } from './css';
 
-/**
- * This class is just a TypeScript declaration. The actual code does not export it.
- */
-declare class ContextElement extends LitElement {
+export class ContextElement extends LitElement {
   /**
    * @property Initial value: `''`
    *
@@ -62,6 +59,8 @@ declare class ContextElement extends LitElement {
 
   private static _styleGetterArray: Array<StyleGetter>;
 
+  static styleGetter?: StyleGetter | Array<StyleGetter>;
+
   /**
    * LitElement:
    * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
@@ -73,6 +72,9 @@ declare class ContextElement extends LitElement {
   disconnectedCallback(): void;
 }
 
+/**
+ * @deprecated Use `ContextElement`
+ */
 export default function contextElementMixin(
   getter?: StyleGetter | Array<StyleGetter>,
 ): typeof ContextElement;
