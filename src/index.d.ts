@@ -3,7 +3,7 @@ import { ContextElement } from './context-element';
 export * from './global-props';
 export * from './css';
 export * from './context';
-export { default as contextElementMixin, GooberGetter, ContextElement } from './context-element';
+export { default as contextElementMixin, ContextElement } from './context-element';
 export {
   html,
   svg,
