@@ -136,8 +136,10 @@ Context Element also exports the `createLitGetter`, which generates a compatible
 
 ### How does it work?
 
-`contextElementMixin` accepts a single (or an array of) [StyleGetter](./src/css.d.ts#L9) and returns a non-instantiated class.
-This class is an extension of LitElement class with some extra functionality. See [ContextElement](./src/context-element.d.ts#L7).
+`ContextElement` is an extension of LitElement class that handles context.
+See [ContextElement](./src/context-element.d.ts#L4).
+
+`ContextElement.styleGetter` accepts a single (or an array of) [StyleGetter](./src/css.d.ts#L9).
 
 `createGooberGetter` is a template string tag that uses the [CreateStyleGetterProps](./src/css.d.ts#L33) interface,
 thus, the first interpolation must be used to inject the default context, and the other interpolations must use callbacks to obtain it;
@@ -145,7 +147,7 @@ in this way, context values ​​can be changed at runtime (via `setContext`).
 
 The Context Element creates two global objects: `DSRegistry` and `DSContext`.
 
-> `DSRegistry` is an array where all instances of Context Element register itself, thus being able to be easily accessed by other entities,
+> `DSRegistry` is an array where all instances of ContextElement register itself, thus being able to be easily accessed by other entities,
 > such as [updateRegisteredComponents](./src/context.d.ts#L9) function.
 >
 > `DSContext` is a map that can contain the contexts of the components. Initially it is an empty instance,
@@ -201,13 +203,13 @@ and adds the following scopes (see [commitlint.config.js](./commitlint.config.js
 
 - commitlint: any commitlint config or dependency change
 
-- snowpack: ´´
+- snowpack: any snowpack config or dependency change
 
-- web-test-runner: ´´
+- web-test-runner: any web-test-runner config or dependency change
 
-- husky: ´´
+- husky: any husky config or dependency change
 
-- husky-controller: ´´
+- husky-controller: any husky-controller config or dependency change
 
 - server: any change to the `server.js` file
 
