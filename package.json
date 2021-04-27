@@ -10,6 +10,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "src",
+    "build/**/*.js",
+    "build/**/*.json"
+  ],
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
@@ -18,7 +23,7 @@
     "test": "yarn build && yarn web-test-runner",
     "eslint": "eslint --ext .js,.mjs,.html . --ignore-path .gitignore",
     "prepare": "husky install",
-    "postinstall": "npx snowpack build"
+    "prepack": "yarn build"
   },
   "dependencies": {
     "axios": "^0.21.1",
