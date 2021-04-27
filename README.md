@@ -70,10 +70,10 @@ export class MyInput extends ContextElement {
 
   render() {
     return html`
-      <label class="my-Input-st1-label ${this.styleId}">
+      <label class="my-Input-label ${this.styleId}">
         <span>${this.label}</span>
         <input
-          class="my-Input-st1"
+          class="my-Input"
           type="${this.type}"
           placeholder="${this.placeholder}"
           ?required=${this.required}
@@ -98,7 +98,7 @@ import { inputContext } from './contexts.js';
 export default css`
   /* default context: ${inputContext} */
 
-  &.my-Input-st1-label {
+  &.my-Input-label {
     display: flex;
     flex-direction: column;
 
