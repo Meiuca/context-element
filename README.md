@@ -42,10 +42,10 @@ The process is very similar to the [standard Lit Element construction process](h
 
 ```js
 // index.js
-import { contextElementMixin, html } from '@meiuca/context-element';
+import { ContextElement, html } from '@meiuca/context-element';
 import style from './style.js';
 
-export class MyInput extends contextElementMixin(style) {
+export class MyInput extends ContextElement {
   static get properties() {
     return {
       label: { type: String },
@@ -53,6 +53,10 @@ export class MyInput extends contextElementMixin(style) {
       placeholder: { type: String },
       required: { type: Boolean },
     };
+  }
+
+  static get styleGetter() {
+    return style;
   }
 
   constructor() {
@@ -173,4 +177,46 @@ the instance will lose the previous reference and, if the new pointer does not e
 
 ## Contributing
 
-To be added.
+Any contribution is welcome, as long as you follow the rules of prettier, eslint, commitlint,
+tests and [git branch](https://danielkummer.github.io/git-flow-cheatsheet)
+
+### Prettier
+
+all files must be formatted using prettier, whose behavior is determined by [.prettierrc](./.prettierrc)
+
+### Eslint
+
+extends [@open-wc/eslint-config](https://open-wc.org/guides/tools/linting-and-formatting/#linting-config). See [.eslintrc](./.eslintrc)
+
+### Commitlint
+
+extends [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional)
+and adds the following scopes (see [commitlint.config.js](./commitlint.config.js)):
+
+- eslint: any eslint config or dependency change
+
+- prettier: any prettier config or dependency change
+
+- babel: any babel config or dependency change
+
+- commitlint: any commitlint config or dependency change
+
+- snowpack: ´´
+
+- web-test-runner: ´´
+
+- husky: ´´
+
+- husky-controller: ´´
+
+- server: any change to the `server.js` file
+
+- vscode: any change to the `.vscode` folder
+
+- `('./src/*.js', 'src#')`: any change to any js file inside `src` folder; prefixed by `src#`. Example: `src#context.js`
+
+- `('./test/*.js', 'test#')`: any change to any js file inside `test` folder; prefixed by `test#`
+
+- package-json: any change to the `package.json` file that do not affect any of the previous scopes
+
+Before committing, please make sure that husky is properly installed, Especially if you are a [mac user](https://stackoverflow.com/questions/8598639/why-is-my-git-pre-commit-hook-not-executable-by-default).
