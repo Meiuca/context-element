@@ -28,6 +28,7 @@ module.exports = {
         'package-json',
         'server',
         'vscode',
+        'husky-controller',
         // 'proposal',
         ...(await getFiles('./src/*.js', 'src#')),
         ...(await getFiles('./test/*.js', 'test#')),
