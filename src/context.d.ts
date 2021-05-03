@@ -1,10 +1,11 @@
-import { CSSResult } from 'lit-element';
-
 declare interface ContextRegistry {
   [id: string]: any;
 }
 
-export function getComponentContext<Context>(contextId: string, defaultContext?: Context): Context;
+export function getComponentContext<Context = {}>(
+  contextId: string,
+  defaultContext?: Context,
+): Context;
 
 export function updateRegisteredComponents(): void;
 

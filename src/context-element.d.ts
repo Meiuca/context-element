@@ -1,4 +1,4 @@
-import { CSSResult, LitElement, CSSResultOrNative, CSSResultArray } from 'lit-element';
+import { LitElement, CSSResultGroup } from 'lit';
 import { StyleInstance, StyleGetter } from './css';
 
 export class ContextElement extends LitElement {
@@ -12,17 +12,17 @@ export class ContextElement extends LitElement {
   context: string;
 
   /**
-   * @internalProperty Initial value: same as `this.localName`
+   * Initial value: same as `this.localName`
    */
   contextId: string;
 
   /**
-   * @internalProperty Initial value: `['']`
+   * Initial value: `['']`
    */
   styleIdList: string[];
 
   /**
-   * @internalProperty Equivalent to `styleIdList[0]`
+   * Equivalent to `styleIdList[0]`
    */
   styleId: string;
 
@@ -33,7 +33,7 @@ export class ContextElement extends LitElement {
   protected handleUpdateContext(): Promise<void>;
 
   /**
-   * @internalProperty  Initial value: `true`
+   * Initial value: `true`
    *
    * It is set to `false` when `updateStyles` is called, and true after the style is updated.
    * If your element uses transitions, you should use this property as a control,
@@ -66,18 +66,14 @@ export class ContextElement extends LitElement {
   static styleGetter?: StyleGetter | Array<StyleGetter>;
 
   /**
-   * Array of styles to apply to the element. The styles should be defined
-   * using the [[`litElementCSS`]] tag function.
+   * @private
+   * Make it private to block its use, since `this.updateStyles` will change this variable
    */
-  static styles?: CSSResultOrNative | CSSResultArray;
+  private static styles?: CSSResultGroup;
 
   /**
-   * LitElement:
-   * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
-   * when disconnecting at some point in the future.
-   *
-   * ContextElement:
-   * - Remove itself from registry when removed from the DOM
+   * @override
+   * Remove itself from registry when removed from the DOM
    */
   disconnectedCallback(): void;
 }

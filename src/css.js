@@ -1,5 +1,5 @@
 import { css as gooberCSS, extractCss } from 'goober';
-import { unsafeCSS } from 'lit-element';
+import { unsafeCSS } from 'lit';
 import { getComponentContext } from './context.js';
 
 // ALL ITEMS STARTED WITH `_` ARE EXPLICITLY PRIVATE

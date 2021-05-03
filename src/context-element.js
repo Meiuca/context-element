@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { LitElement, property, internalProperty } from 'lit-element';
+import { LitElement, adoptStyles } from 'lit';
+import { property, state } from 'lit/decorators.js';
 import { isArray, kebabCase, has } from 'lodash';
 import { setContext } from './context.js';
 
@@ -24,13 +25,18 @@ function _concatProperties(array, propName) {
 export class ContextElement extends LitElement {
   @property() context = '';
 
-  @internalProperty() contextId = this.localName;
+  /**
+   * @type {string}
+   *
+   * Initialized on line 90
+   */
+  @state() contextId;
 
-  @internalProperty() styleIdList = [''];
+  @state() styleIdList = [''];
 
-  @internalProperty() styleId = '';
+  @state() styleId = '';
 
-  @internalProperty() allowTransitions = true;
+  @state() allowTransitions = true;
 
   static styleGetter;
 
@@ -52,18 +58,12 @@ export class ContextElement extends LitElement {
 
     // Register itself when instantiated
     window.DSRegistry.push(this);
-
-    // First update in the life cycle.
-    // It needs to be done when the object is instantiated
-    // to adopt the styles during initialization
-    this.updateStyles();
   }
 
   /**
-   * Updates the element. This method reflects property values to attributes and calls render to render DOM via lit-html.
-   * Setting properties inside this method will not trigger another update.
+   * @override
    *
-   * @param {Map<string, unknown>} changedProperties Map of changed properties with old values
+   * @param {Map<string | number | symbol, unknown>} changedProperties Map of changed properties with old values
    */
   update(changedProperties) {
     super.update(changedProperties);
@@ -82,11 +82,11 @@ export class ContextElement extends LitElement {
   async updateContext() {
     if (this.context) {
       // In this case `this.updateStyles` does not need to be called
-      // because `setContext` [line 90,99] already does
+      // because `setContext` [line 103,115] already does
 
       await this.handleUpdateContext();
     } else {
-      // Reset contextId
+      // Reset or initialize contextId
       this.contextId = this.localName;
 
       this.updateStyles();
@@ -101,6 +101,9 @@ export class ContextElement extends LitElement {
       this.contextId = `${this.localName}__${kebabCase(contextSubstr)}`;
 
       await setContext(this.contextId, window[contextSubstr] || {});
+
+      // Avoid performing http test
+      return;
     }
 
     if (/^htt(p|ps):\/\//.test(this.context)) {
@@ -132,29 +135,27 @@ export class ContextElement extends LitElement {
       .map(styleGetter => styleGetter(this.contextId))
       .filter(style => has(style, 'id') && has(style, 'result'));
 
-    this.constructor._styles = _concatProperties(styleArray, 'result');
+    this.constructor.styles = _concatProperties(styleArray, 'result');
 
-    // Match the value of `_styles` and `styles`,
+    // Match the value of `styles` and `_styles`,
     // since `_styles` is the private version of `styles`
-    this.constructor.styles = this.constructor._styles;
+    this.constructor._styles = this.constructor.styles;
 
     this.styleIdList = _concatProperties(styleArray, 'id');
 
     // Avoid change `this.styleId` to `undefined`
     if (this.styleIdList[0]) {
       [this.styleId] = this.styleIdList;
+    } else {
+      this.styleId = '';
     }
 
-    this.adoptStyles();
+    adoptStyles(this.shadowRoot, this.constructor.styles);
   }
 
   /**
-   * LitElement:
-   * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
-   * when disconnecting at some point in the future.
-   *
-   * ContextElement:
-   * - Remove itself from registry when removed from the DOM
+   * @override
+   * Remove itself from registry when removed from the DOM
    */
   disconnectedCallback() {
     super.disconnectedCallback();

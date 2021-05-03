@@ -1,26 +1,36 @@
 import { ContextElement } from './context-element';
 
 export * from './global-props';
+
 export * from './css';
+
 export * from './context';
+
 export { default as contextElementMixin, ContextElement } from './context-element';
+
 export {
   html,
   svg,
-  customElement,
   defaultConverter,
-  property,
-  eventOptions,
-  internalProperty,
   notEqual,
+  supportsAdoptingStyleSheets,
+  css as litCSS,
+  unsafeCSS as litUnsafeCSS,
+  getCompatibleStyle,
+  render,
+  noChange,
+} from 'lit';
+
+export {
+  eventOptions,
+  customElement,
+  property,
   query,
   queryAll,
   queryAssignedNodes,
   queryAsync,
-  supportsAdoptingStyleSheets,
-  css as litElementCSS,
-  unsafeCSS as litElementUnsafeCSS,
-} from 'lit-element';
+  state,
+} from 'lit/decorators.js';
 
 declare global {
   interface Window {

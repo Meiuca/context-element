@@ -1,5 +1,5 @@
 import { CSSAttribute } from 'goober';
-import { CSSResult } from 'lit-element';
+import { CSSResult } from 'lit';
 
 declare interface StyleInstance {
   id: string;
