@@ -16,10 +16,11 @@ import { setContext } from './context.js';
  * @returns {Array<TArray[0][TPropName]>}
  */
 function _concatProperties(array, propName) {
-  const propConcatCallback = (previousValue, currentValue) =>
-    previousValue.concat([currentValue[propName]]);
+  const resultArray = [];
 
-  return array.reduce(propConcatCallback, []);
+  array.forEach(item => resultArray.push(item[propName]));
+
+  return resultArray;
 }
 
 export class ContextElement extends LitElement {
