@@ -158,7 +158,7 @@ function _createGetterObj(getter, tag, props) {
   // DEPRECATED
   bindedGetter.reactify = componentContextId => {
     // eslint-disable-next-line no-console
-    console.warn(new Error('function reactify is deprecated'));
+    console.warn('function reactify is deprecated');
 
     return bindedGetter.extract(componentContextId);
   };

@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { LitElement, adoptStyles } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { isArray, kebabCase, has } from 'lodash';
+import { isArray, kebabCase } from 'lodash';
 import { setContext } from './context.js';
 
 /**
@@ -30,13 +30,15 @@ export class ContextElement extends LitElement {
    *
    * Initialized on line 90
    */
-  @state() contextId;
+  contextId;
 
   @state() styleIdList = [''];
 
   @state() styleId = '';
 
   @state() allowTransitions = true;
+
+  static useTransitions = false;
 
   static styleGetter;
 
@@ -66,8 +68,6 @@ export class ContextElement extends LitElement {
    * @param {Map<string | number | symbol, unknown>} changedProperties Map of changed properties with old values
    */
   update(changedProperties) {
-    super.update(changedProperties);
-
     // Add support for changes to the context id pointer
     if (
       // Check if `this.context` is truthy and was changed
@@ -77,6 +77,8 @@ export class ContextElement extends LitElement {
     ) {
       this.updateContext();
     }
+
+    super.update(changedProperties);
   }
 
   async updateContext() {
@@ -117,23 +119,23 @@ export class ContextElement extends LitElement {
   }
 
   updateStyles() {
-    // Set `this.allowTransitions` to false to avoid glitches.
-    // For this change to take effect, this property needs to be properly implemented
-    this.allowTransitions = false;
+    if (this.constructor.useTransitions) {
+      // Set `this.allowTransitions` to false to avoid glitches.
+      // For this change to take effect, this property needs to be properly implemented
+      this.allowTransitions = false;
 
-    // Set `this.allowTransitions` to true after all changes have been made
-    setTimeout(() => {
-      this.allowTransitions = true;
-    });
+      // Set `this.allowTransitions` to true after all changes have been made
+      setTimeout(() => {
+        this.allowTransitions = true;
+      });
+    }
 
     /**
      * @type {typeof import('./context-element').ContextElement}
      */
     const { _styleGetterArray } = this.constructor;
 
-    const styleArray = _styleGetterArray
-      .map(styleGetter => styleGetter(this.contextId))
-      .filter(style => has(style, 'id') && has(style, 'result'));
+    const styleArray = _styleGetterArray.map(styleGetter => styleGetter(this.contextId));
 
     this.constructor.styles = _concatProperties(styleArray, 'result');
 
@@ -150,7 +152,7 @@ export class ContextElement extends LitElement {
       this.styleId = '';
     }
 
-    adoptStyles(this.shadowRoot, this.constructor.styles);
+    adoptStyles(this.renderRoot, this.constructor.styles);
   }
 
   /**
@@ -169,7 +171,7 @@ export class ContextElement extends LitElement {
 // DEPRECATED
 export default function contextElementMixin(getter = []) {
   // eslint-disable-next-line no-console
-  console.warn(new Error('function contextElementMixin is deprecated'));
+  console.warn('function contextElementMixin is deprecated');
 
   return class extends ContextElement {
     static styleGetter = getter;
