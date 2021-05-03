@@ -7,6 +7,25 @@
     <title>Document</title>
   </head>
   <body>
-    <script type="module" src="/src/module-declaration.js"></script>
+    <script type="module">
+      // eslint-disable-next-line import/no-unresolved
+      import { ContextElement, createGooberGetter, html } from './src/index.js';
+
+      class TestSpan extends ContextElement {
+        static styleGetter = createGooberGetter`
+          /* ${{ color: 'blue' }} */
+
+          color: ${({ color }) => color};
+        `;
+
+        render() {
+          return html` <span class="${this.styleId}"> Feels good </span> `;
+        }
+      }
+
+      customElements.define('test-span', TestSpan);
+    </script>
+
+    <test-span></test-span>
   </body>
 </html>
