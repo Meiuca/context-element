@@ -8,8 +8,17 @@
   </head>
   <body>
     <script type="module">
-      // eslint-disable-next-line import/no-unresolved
-      import { ContextElement, createGooberGetter, html } from './src/index.js';
+      import {
+        ContextElement,
+        createGooberGetter,
+        html,
+        setContext,
+        clearContext,
+        // eslint-disable-next-line import/no-unresolved
+      } from './src/index.js';
+
+      window.setContext = setContext;
+      window.clearContext = clearContext;
 
       class TestSpan extends ContextElement {
         static styleGetter = createGooberGetter`
@@ -17,6 +26,8 @@
 
           color: ${({ color }) => color};
         `;
+
+        // static useTransitions = true;
 
         render() {
           return html` <span class="${this.styleId}"> Feels good </span> `;
