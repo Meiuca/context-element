@@ -12,8 +12,7 @@
   },
   "files": [
     "src",
-    "build/**/*.js",
-    "build/**/*.json"
+    "build/**/*.{js,json,js.map}"
   ],
   "scripts": {
     "start": "snowpack dev",
@@ -28,7 +27,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "goober": "^2.0.33",
-    "lit-element": "^2.3.1",
+    "lit": "^2.0.0-rc.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
