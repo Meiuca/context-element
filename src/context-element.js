@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { LitElement, adoptStyles } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { isArray, kebabCase } from 'lodash';
+import { kebabCase } from 'lodash';
 import { setContext } from './context.js';
 
 /**
@@ -47,7 +47,7 @@ export class ContextElement extends LitElement {
       return [];
     }
 
-    return isArray(this.styleGetter) ? this.styleGetter : [this.styleGetter];
+    return Array.isArray(this.styleGetter) ? this.styleGetter : [this.styleGetter];
   }
 
   constructor() {
@@ -138,10 +138,6 @@ export class ContextElement extends LitElement {
     const styleArray = _styleGetterArray.map(styleGetter => styleGetter(this.contextId));
 
     this.constructor.styles = _concatProperties(styleArray, 'result');
-
-    // Match the value of `styles` and `_styles`,
-    // since `_styles` is the private version of `styles`
-    this.constructor._styles = this.constructor.styles;
 
     this.styleIdList = _concatProperties(styleArray, 'id');
 
