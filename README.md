@@ -1,6 +1,6 @@
 # Context Element
 
-Context Element is an extension of [Lit Element v2.3.1](https://lit-element.polymer-project.org/guide) that adds support for context
+Context Element is an extension of [Lit v2.0.0-rc.1](https://lit.dev) that adds support for context
 control and handles Scss-in-JS (powered by [Goober](https://github.com/cristianbote/goober)).
 
 ## Installation
