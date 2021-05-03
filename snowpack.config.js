@@ -6,5 +6,8 @@ module.exports = {
   },
   plugins: ['@snowpack/plugin-babel', '@snowpack/plugin-dotenv'],
   optimize: { minify: true },
+  buildOptions: {
+    sourcemap: true,
+  },
   exclude: ['*.d.ts'],
 };
