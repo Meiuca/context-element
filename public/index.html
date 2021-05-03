@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+
   <body>
     <script type="module">
       import {
@@ -22,21 +23,35 @@
 
       class TestSpan extends ContextElement {
         static styleGetter = createGooberGetter`
-          /* ${{ color: 'blue' }} */
+          /* ${{ color: 'blue', hover: { color: 'cyan' } }} */
 
           color: ${({ color }) => color};
+          transition: 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+          &.transitions-enabled:hover,
+          &.transitions-enabled:focus {
+            color: ${({ hover }) => hover.color};
+            transform: translateX(30px);
+          }
         `;
 
-        // static useTransitions = true;
+        static useTransitions = true;
 
         render() {
-          return html` <span class="${this.styleId}"> Feels good </span> `;
+          const { allowTransitions } = this;
+
+          const transitions = allowTransitions ? ' transitions-enabled' : '';
+
+          return html` <button class="${this.styleId}${transitions}">Feels good</button> `;
         }
       }
 
-      customElements.define('test-span', TestSpan);
+      customElements.define('test-button', TestSpan);
     </script>
 
-    <test-span></test-span>
+    <button onclick="setContext('test-button', {color:'red'})">set</button>
+    <button onclick="clearContext('test-button')">clear</button>
+
+    <test-button></test-button>
   </body>
 </html>
