@@ -39,8 +39,7 @@ export class ContextElement extends LitElement {
    * If your element uses transitions, you should use this property as a control,
    * since the transitions tend to glitch the element during the update.
    *
-   * Example:
-   *
+   * @example
    * ```js
    * render() {
    *  const { allowTransitions } = this;
@@ -58,6 +57,13 @@ export class ContextElement extends LitElement {
   allowTransitions: boolean;
 
   private static _styleGetterArray: Array<StyleGetter>;
+
+  /**
+   * Default value: `false`
+   *
+   * If you are going to use `allowTransitions`, make sure this property is set to `true`
+   */
+  static useTransitions: boolean;
 
   /**
    * Array of style getters to apply to the element. The getters should be defined

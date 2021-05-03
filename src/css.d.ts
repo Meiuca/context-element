@@ -49,6 +49,7 @@ export function css(
  *
  * - This function supports Scss syntax
  *
+ * @example
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createGooberGetter as css } from '@meiuca/context-element';
@@ -78,6 +79,7 @@ export function createGooberGetter<DefaultContext>(
  *
  * - This function should save a few milliseconds per call compared to `createGooberGetter`
  *
+ * @example
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createLitGetter as css } from '@meiuca/context-element';
