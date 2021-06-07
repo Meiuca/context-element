@@ -22,27 +22,19 @@
       window.clearContext = clearContext;
 
       class TestSpan extends ContextElement {
-        static styleGetter = createGooberGetter`
-          /* ${{ color: 'blue', hover: { color: 'cyan' } }} */
-
+        static styleGetter = createGooberGetter({ color: 'blue', hover: { color: 'cyan' } })`
           color: ${({ color }) => color};
           transition: 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 
-          &.transitions-enabled:hover,
-          &.transitions-enabled:focus {
+          &:hover,
+          &:focus {
             color: ${({ hover }) => hover.color};
             transform: translateX(30px);
           }
         `;
 
-        static useTransitions = true;
-
         render() {
-          const { allowTransitions } = this;
-
-          const transitions = allowTransitions ? ' transitions-enabled' : '';
-
-          return html` <button class="${this.styleId}${transitions}">Feels good</button> `;
+          return html` <button class="${this.styleId}"><slot></slot></button> `;
         }
       }
 
@@ -52,6 +44,6 @@
     <button onclick="setContext('test-button', {color:'red'})">set</button>
     <button onclick="clearContext('test-button')">clear</button>
 
-    <test-button></test-button>
+    <test-button>Feels good</test-button>
   </body>
 </html>
