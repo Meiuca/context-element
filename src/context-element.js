@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { LitElement, adoptStyles } from 'lit';
+import { adoptStyles, LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { kebabCase } from 'lodash';
 import { setContext } from './context.js';
@@ -138,8 +138,6 @@ export class ContextElement extends LitElement {
 
     const styleArray = _styleGetterArray.map(styleGetter => styleGetter(this.contextId));
 
-    this.constructor.styles = _concatProperties(styleArray, 'result');
-
     this.styleIdList = _concatProperties(styleArray, 'id');
 
     // Avoid change `this.styleId` to `undefined`
@@ -149,7 +147,11 @@ export class ContextElement extends LitElement {
       this.styleId = '';
     }
 
-    adoptStyles(this.renderRoot, this.constructor.styles);
+    // Keep properties up to date
+    this.constructor.styles = _concatProperties(styleArray, 'result');
+    this.constructor.elementStyles = this.constructor.finalizeStyles(this.constructor.styles);
+    // Update styles
+    adoptStyles(this.renderRoot, this.constructor.elementStyles);
   }
 
   /**
