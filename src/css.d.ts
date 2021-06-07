@@ -54,9 +54,7 @@ export function css(
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createGooberGetter as css } from '@meiuca/context-element';
  *
- * export css`
- * ${defaultButtonContext}
- *
+ * export css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  *
@@ -68,9 +66,8 @@ export function css(
  * ```
  */
 export function createGooberGetter<DefaultContext>(
-  tag: TemplateStringsArray,
-  ...props: CreateStyleGetterProps<DefaultContext>
-): StyleGetter;
+  defaultContext: DefaultContext,
+): (tag: TemplateStringsArray, ...props: CreateStyleGetterProps<DefaultContext>) => StyleGetter;
 
 /**
  * Creates a dinamic style getter using LitElement `unsafeCSS`.
@@ -84,9 +81,7 @@ export function createGooberGetter<DefaultContext>(
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createLitGetter as css } from '@meiuca/context-element';
  *
- * export css`
- * ${defaultButtonContext}
- *
+ * export css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  * }
@@ -98,6 +93,5 @@ export function createGooberGetter<DefaultContext>(
  * ```
  */
 export function createLitGetter<DefaultContext>(
-  tag: TemplateStringsArray,
-  ...props: CreateStyleGetterProps<DefaultContext>
-): StyleGetter;
+  defaultContext: DefaultContext,
+): (tag: TemplateStringsArray, ...props: CreateStyleGetterProps<DefaultContext>) => StyleGetter;
