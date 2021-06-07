@@ -72,12 +72,6 @@ export class ContextElement extends LitElement {
   static styleGetter?: StyleGetter | Array<StyleGetter>;
 
   /**
-   * @private
-   * Make it private to block its use, since `this.updateStyles` will change this variable
-   */
-  private static styles?: CSSResultGroup;
-
-  /**
    * @override
    * Remove itself from registry when removed from the DOM
    */

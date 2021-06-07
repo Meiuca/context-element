@@ -29,7 +29,7 @@ export class ContextElement extends LitElement {
   /**
    * @type {string}
    *
-   * Initialized on line 90
+   * Initialized on line 93
    */
   contextId;
 
@@ -85,7 +85,7 @@ export class ContextElement extends LitElement {
   async updateContext() {
     if (this.context) {
       // In this case `this.updateStyles` does not need to be called
-      // because `setContext` [line 103,115] already does
+      // because `setContext` [line 106,118] already does
 
       await this.handleUpdateContext();
     } else {
