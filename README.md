@@ -95,9 +95,7 @@ Note that `this.styleId` was created by Context Element and contains the id crea
 import { createGooberGetter as css } from '@meiuca/context-element';
 import { inputContext } from './contexts.js';
 
-export default css`
-  /* default context: ${inputContext} */
-
+export default css(inputContext)`
   &.my-Input-label {
     display: flex;
     flex-direction: column;
