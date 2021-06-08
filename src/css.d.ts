@@ -24,16 +24,9 @@ declare interface StyleGetter {
 
 declare type ContextPropGetter<Context> = (context: Context) => string | number;
 
-/**
- * Array whose first item is an object and the rest can be of type string, number or function.
- * Functions will be used internally as a callback that receives, as first and only parameter,
- * an object with structure equal to the first item in the array
- * but containing different values ​​(or not, depending on the use case) and must return string or number.
- */
-declare interface CreateStyleGetterProps<Context extends Object>
-  extends Array<ContextPropGetter<Context> | string | number> {
-  0: Context;
-}
+declare type CreateStyleGetterProps<Context extends Object> = Array<
+  ContextPropGetter<Context> | string | number
+>;
 
 /**
  * Encapsulates [Goober](https://github.com/cristianbote/goober)
