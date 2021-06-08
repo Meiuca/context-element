@@ -54,7 +54,7 @@ export function css(
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createGooberGetter as css } from '@meiuca/context-element';
  *
- * export css(defaultButtonContext)`
+ * export default css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  *
@@ -81,7 +81,7 @@ export function createGooberGetter<DefaultContext>(
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createLitGetter as css } from '@meiuca/context-element';
  *
- * export css(defaultButtonContext)`
+ * export default css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  * }
