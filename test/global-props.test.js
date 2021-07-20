@@ -11,10 +11,10 @@ describe('global-props.js', () => {
   });
 
   it('clearDSRegistry function should clear the DSRegistry', () => {
-    window.DSRegistry.push(null);
+    globalThis.window.DSRegistry.push(null);
 
     clearDSRegistry();
 
-    expect(window.DSRegistry).to.have.length(0);
+    expect(globalThis.window.DSRegistry).to.have.length(0);
   });
 });

@@ -43,7 +43,7 @@ export class ContextElement extends LitElement {
   }
 
   constructor() {
-    if (!window.DSRegistry) {
+    if (!globalThis.window.DSRegistry) {
       // Interrupt instance creation, since `DSRegistry` has not been declared
       throw new Error('DSRegistry is not defined');
     }
@@ -51,7 +51,7 @@ export class ContextElement extends LitElement {
     super();
 
     // Register itself when instantiated
-    window.DSRegistry.push(this);
+    globalThis.window.DSRegistry.push(this);
 
     // First update in the life cycle.
     // It needs to be done when the object is instantiated
@@ -159,9 +159,9 @@ export class ContextElement extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    const selfRegistrationIndex = window.DSRegistry.indexOf(this);
+    const selfRegistrationIndex = globalThis.window.DSRegistry.indexOf(this);
 
-    if (selfRegistrationIndex >= 0) window.DSRegistry.splice(selfRegistrationIndex, 1);
+    if (selfRegistrationIndex >= 0) globalThis.window.DSRegistry.splice(selfRegistrationIndex, 1);
   }
 }
 
