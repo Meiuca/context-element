@@ -6,7 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+
   <body>
-    <script type="module" src="/src/module-declaration.js"></script>
+    <script type="module">
+      import {
+        ContextElement,
+        createGooberGetter,
+        html,
+        setContext,
+        clearContext,
+        // eslint-disable-next-line import/no-unresolved
+      } from './src/index.js';
+
+      window.setContext = setContext;
+      window.clearContext = clearContext;
+
+      class TestSpan extends ContextElement {
+        static styleGetter = createGooberGetter({ color: 'blue', hover: { color: 'cyan' } })`
+          color: ${({ color }) => color};
+          transition: 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+          &:hover,
+          &:focus {
+            color: ${({ hover }) => hover.color};
+            transform: translateX(30px);
+          }
+        `;
+
+        render() {
+          return html` <button class="${this.styleId}"><slot></slot></button> `;
+        }
+      }
+
+      customElements.define('test-button', TestSpan);
+    </script>
+
+    <button onclick="setContext('test-button', {color:'red'})">set</button>
+    <button onclick="clearContext('test-button')">clear</button>
+
+    <test-button>Feels good</test-button>
   </body>
 </html>

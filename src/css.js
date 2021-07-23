@@ -1,8 +1,10 @@
 import { css as gooberCSS, extractCss } from 'goober';
-import { unsafeCSS } from 'lit-element';
+import { unsafeCSS } from 'lit';
 import { getComponentContext } from './context.js';
 
 // ALL ITEMS STARTED WITH `_` ARE EXPLICITLY PRIVATE
+
+const _interpolate = tag => (prev, curr, idx) => prev + curr + tag[idx + 1];
 
 // Change goober target to a private element
 const _wrapper = document.createElement('div');
@@ -80,8 +82,8 @@ function _extract(componentContextId) {
  *
  * @returns {import('./css').StyleInstance} StyleInstance returned from `cssFn`
  */
-function _getter(tag, props, cssFn, componentContextId) {
-  const context = getComponentContext(componentContextId, props[0]);
+function _getter(tag, props, cssFn, componentContextId, defaultContext) {
+  const context = getComponentContext(componentContextId, defaultContext);
 
   const mappedProps = props.map(prop => {
     // SEE: css.d.ts; line 33
@@ -92,9 +94,7 @@ function _getter(tag, props, cssFn, componentContextId) {
     return prop;
   });
 
-  const interpolate = (prev, curr, idx) => prev + curr + tag[idx + 1];
-
-  const cssText = mappedProps.reduce(interpolate, tag[0]);
+  const cssText = mappedProps.reduce(_interpolate(tag), tag[0]);
 
   return cssFn(cssText);
 }
@@ -111,9 +111,9 @@ function _getter(tag, props, cssFn, componentContextId) {
  * @param {string} componentContextId
  */
 function _gooberGetter(componentContextId) {
-  const { tag, props } = this;
+  const { tag, props, defaultContext } = this;
 
-  return _getter(tag, props, css, componentContextId);
+  return _getter(tag, props, css, componentContextId, defaultContext);
 }
 
 /**
@@ -128,9 +128,9 @@ function _gooberGetter(componentContextId) {
  * @param {string} componentContextId
  */
 function _litGetter(componentContextId) {
-  const { tag, props } = this;
+  const { tag, props, defaultContext } = this;
 
-  return _getter(tag, props, _litCss, componentContextId);
+  return _getter(tag, props, _litCss, componentContextId, defaultContext);
 }
 
 /**
@@ -144,21 +144,15 @@ function _litGetter(componentContextId) {
  *
  * @returns {import('./css').StyleGetter} binded `getter`
  */
-function _createGetterObj(getter, tag, props) {
-  // Checks if `props` is valid according to CreateStyleGetterProps interface
-  // SEE: css.d.ts; line 33
-  if (typeof props[0] !== 'object' && props.length > 0) {
-    throw new Error(`typeof props[0] is '${typeof props[0]}'; must be 'object'`);
-  }
-
-  const bindedGetter = getter.bind({ tag, props });
+function _createGetterObj(getter, tag, props, defaultContext) {
+  const bindedGetter = getter.bind({ tag, props, defaultContext });
 
   bindedGetter.extract = _extract.bind({ bindedGetter });
 
   // DEPRECATED
   bindedGetter.reactify = componentContextId => {
     // eslint-disable-next-line no-console
-    console.warn(new Error('function reactify is deprecated'));
+    console.warn('function reactify is deprecated');
 
     return bindedGetter.extract(componentContextId);
   };
@@ -166,12 +160,20 @@ function _createGetterObj(getter, tag, props) {
   return bindedGetter;
 }
 
-function createGooberGetter(tag, ...props) {
-  return _createGetterObj(_gooberGetter, tag, props);
+function createGooberGetter(defaultContext) {
+  if (typeof defaultContext !== 'object') {
+    throw new TypeError('defaultContext is not an object');
+  }
+
+  return (tag, ...props) => _createGetterObj(_gooberGetter, tag, props, defaultContext);
 }
 
-function createLitGetter(tag, ...props) {
-  return _createGetterObj(_litGetter, tag, props);
+function createLitGetter(defaultContext) {
+  if (typeof defaultContext !== 'object') {
+    throw new TypeError('defaultContext is not an object');
+  }
+
+  return (tag, ...props) => _createGetterObj(_litGetter, tag, props, defaultContext);
 }
 
 export { css, createGooberGetter, createLitGetter };

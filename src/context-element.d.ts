@@ -1,4 +1,4 @@
-import { CSSResult, LitElement, CSSResultOrNative, CSSResultArray } from 'lit-element';
+import { LitElement, CSSResultGroup } from 'lit';
 import { StyleInstance, StyleGetter } from './css';
 
 export class ContextElement extends LitElement {
@@ -12,17 +12,17 @@ export class ContextElement extends LitElement {
   context: string;
 
   /**
-   * @internalProperty Initial value: same as `this.localName`
+   * Initial value: same as `this.localName`
    */
   contextId: string;
 
   /**
-   * @internalProperty Initial value: `['']`
+   * Initial value: `['']`
    */
   styleIdList: string[];
 
   /**
-   * @internalProperty Equivalent to `styleIdList[0]`
+   * Equivalent to `styleIdList[0]`
    */
   styleId: string;
 
@@ -33,14 +33,13 @@ export class ContextElement extends LitElement {
   protected handleUpdateContext(): Promise<void>;
 
   /**
-   * @internalProperty  Initial value: `true`
+   * Initial value: `true`
    *
    * It is set to `false` when `updateStyles` is called, and true after the style is updated.
    * If your element uses transitions, you should use this property as a control,
    * since the transitions tend to glitch the element during the update.
    *
-   * Example:
-   *
+   * @example
    * ```js
    * render() {
    *  const { allowTransitions } = this;
@@ -60,24 +59,21 @@ export class ContextElement extends LitElement {
   private static _styleGetterArray: Array<StyleGetter>;
 
   /**
+   * Default value: `false`
+   *
+   * If you are going to use `allowTransitions`, make sure this property is set to `true`
+   */
+  static useTransitions: boolean;
+
+  /**
    * Array of style getters to apply to the element. The getters should be defined
    * using the `createGooberGetter` or `createLitGetter` tag function.
    */
   static styleGetter?: StyleGetter | Array<StyleGetter>;
 
   /**
-   * Array of styles to apply to the element. The styles should be defined
-   * using the [[`litElementCSS`]] tag function.
-   */
-  static styles?: CSSResultOrNative | CSSResultArray;
-
-  /**
-   * LitElement:
-   * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
-   * when disconnecting at some point in the future.
-   *
-   * ContextElement:
-   * - Remove itself from registry when removed from the DOM
+   * @override
+   * Remove itself from registry when removed from the DOM
    */
   disconnectedCallback(): void;
 }

@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { LitElement, property, internalProperty } from 'lit-element';
-import { isArray, kebabCase, has } from 'lodash';
+import { adoptStyles, LitElement } from 'lit';
+import { property, state } from 'lit/decorators.js';
+import { kebabCase } from 'lodash';
 import { setContext } from './context.js';
 
 /**
@@ -15,22 +16,30 @@ import { setContext } from './context.js';
  * @returns {Array<TArray[0][TPropName]>}
  */
 function _concatProperties(array, propName) {
-  const propConcatCallback = (previousValue, currentValue) =>
-    previousValue.concat([currentValue[propName]]);
+  const resultArray = [];
 
-  return array.reduce(propConcatCallback, []);
+  array.forEach(item => resultArray.push(item[propName]));
+
+  return resultArray;
 }
 
 export class ContextElement extends LitElement {
   @property() context = '';
 
-  @internalProperty() contextId = this.localName;
+  /**
+   * @type {string}
+   *
+   * Initialized on line 93
+   */
+  contextId;
 
-  @internalProperty() styleIdList = [''];
+  @state() styleIdList = [''];
 
-  @internalProperty() styleId = '';
+  @state() styleId = '';
 
-  @internalProperty() allowTransitions = true;
+  @state() allowTransitions = true;
+
+  static useTransitions = false;
 
   static styleGetter;
 
@@ -39,7 +48,7 @@ export class ContextElement extends LitElement {
       return [];
     }
 
-    return isArray(this.styleGetter) ? this.styleGetter : [this.styleGetter];
+    return Array.isArray(this.styleGetter) ? this.styleGetter : [this.styleGetter];
   }
 
   constructor() {
@@ -51,23 +60,15 @@ export class ContextElement extends LitElement {
     super();
 
     // Register itself when instantiated
-    globalThis.window.DSRegistry.push(this);
-
-    // First update in the life cycle.
-    // It needs to be done when the object is instantiated
-    // to adopt the styles during initialization
-    this.updateStyles();
+    window.DSRegistry.push(this);
   }
 
   /**
-   * Updates the element. This method reflects property values to attributes and calls render to render DOM via lit-html.
-   * Setting properties inside this method will not trigger another update.
+   * @override
    *
-   * @param {Map<string, unknown>} changedProperties Map of changed properties with old values
+   * @param {Map<string | number | symbol, unknown>} changedProperties Map of changed properties with old values
    */
   update(changedProperties) {
-    super.update(changedProperties);
-
     // Add support for changes to the context id pointer
     if (
       // Check if `this.context` is truthy and was changed
@@ -77,16 +78,18 @@ export class ContextElement extends LitElement {
     ) {
       this.updateContext();
     }
+
+    super.update(changedProperties);
   }
 
   async updateContext() {
     if (this.context) {
       // In this case `this.updateStyles` does not need to be called
-      // because `setContext` [line 90,99] already does
+      // because `setContext` [line 106,118] already does
 
       await this.handleUpdateContext();
     } else {
-      // Reset contextId
+      // Reset or initialize contextId
       this.contextId = this.localName;
 
       this.updateStyles();
@@ -101,6 +104,9 @@ export class ContextElement extends LitElement {
       this.contextId = `${this.localName}__${kebabCase(contextSubstr)}`;
 
       await setContext(this.contextId, window[contextSubstr] || {});
+
+      // Avoid performing http test
+      return;
     }
 
     if (/^htt(p|ps):\/\//.test(this.context)) {
@@ -114,47 +120,43 @@ export class ContextElement extends LitElement {
   }
 
   updateStyles() {
-    // Set `this.allowTransitions` to false to avoid glitches.
-    // For this change to take effect, this property needs to be properly implemented
-    this.allowTransitions = false;
+    if (this.constructor.useTransitions) {
+      // Set `this.allowTransitions` to false to avoid glitches.
+      // For this change to take effect, this property needs to be properly implemented
+      this.allowTransitions = false;
 
-    // Set `this.allowTransitions` to true after all changes have been made
-    setTimeout(() => {
-      this.allowTransitions = true;
-    });
+      // Set `this.allowTransitions` to true after all changes have been made
+      setTimeout(() => {
+        this.allowTransitions = true;
+      });
+    }
 
     /**
      * @type {typeof import('./context-element').ContextElement}
      */
     const { _styleGetterArray } = this.constructor;
 
-    const styleArray = _styleGetterArray
-      .map(styleGetter => styleGetter(this.contextId))
-      .filter(style => has(style, 'id') && has(style, 'result'));
-
-    this.constructor._styles = _concatProperties(styleArray, 'result');
-
-    // Match the value of `_styles` and `styles`,
-    // since `_styles` is the private version of `styles`
-    this.constructor.styles = this.constructor._styles;
+    const styleArray = _styleGetterArray.map(styleGetter => styleGetter(this.contextId));
 
     this.styleIdList = _concatProperties(styleArray, 'id');
 
     // Avoid change `this.styleId` to `undefined`
     if (this.styleIdList[0]) {
       [this.styleId] = this.styleIdList;
+    } else {
+      this.styleId = '';
     }
 
-    this.adoptStyles();
+    // Keep properties up to date
+    this.constructor.styles = _concatProperties(styleArray, 'result');
+    this.constructor.elementStyles = this.constructor.finalizeStyles(this.constructor.styles);
+    // Update styles
+    adoptStyles(this.renderRoot, this.constructor.elementStyles);
   }
 
   /**
-   * LitElement:
-   * - Allows for super.disconnectedCallback() in extensions while reserving the possibility of making non-breaking feature additions
-   * when disconnecting at some point in the future.
-   *
-   * ContextElement:
-   * - Remove itself from registry when removed from the DOM
+   * @override
+   * Remove itself from registry when removed from the DOM
    */
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -168,7 +170,7 @@ export class ContextElement extends LitElement {
 // DEPRECATED
 export default function contextElementMixin(getter = []) {
   // eslint-disable-next-line no-console
-  console.warn(new Error('function contextElementMixin is deprecated'));
+  console.warn('function contextElementMixin is deprecated');
 
   return class extends ContextElement {
     static styleGetter = getter;

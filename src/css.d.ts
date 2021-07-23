@@ -1,5 +1,5 @@
 import { CSSAttribute } from 'goober';
-import { CSSResult } from 'lit-element';
+import { CSSResult } from 'lit';
 
 declare interface StyleInstance {
   id: string;
@@ -24,16 +24,9 @@ declare interface StyleGetter {
 
 declare type ContextPropGetter<Context> = (context: Context) => string | number;
 
-/**
- * Array whose first item is an object and the rest can be of type string, number or function.
- * Functions will be used internally as a callback that receives, as first and only parameter,
- * an object with structure equal to the first item in the array
- * but containing different values ​​(or not, depending on the use case) and must return string or number.
- */
-declare interface CreateStyleGetterProps<Context extends Object>
-  extends Array<ContextPropGetter<Context> | string | number> {
-  0: Context;
-}
+declare type CreateStyleGetterProps<Context extends Object> = Array<
+  ContextPropGetter<Context> | string | number
+>;
 
 /**
  * Encapsulates [Goober](https://github.com/cristianbote/goober)
@@ -49,13 +42,12 @@ export function css(
  *
  * - This function supports Scss syntax
  *
+ * @example
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createGooberGetter as css } from '@meiuca/context-element';
  *
- * export css`
- * ${defaultButtonContext}
- *
+ * export default css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  *
@@ -67,9 +59,8 @@ export function css(
  * ```
  */
 export function createGooberGetter<DefaultContext>(
-  tag: TemplateStringsArray,
-  ...props: CreateStyleGetterProps<DefaultContext>
-): StyleGetter;
+  defaultContext: DefaultContext,
+): (tag: TemplateStringsArray, ...props: CreateStyleGetterProps<DefaultContext>) => StyleGetter;
 
 /**
  * Creates a dinamic style getter using LitElement `unsafeCSS`.
@@ -78,13 +69,12 @@ export function createGooberGetter<DefaultContext>(
  *
  * - This function should save a few milliseconds per call compared to `createGooberGetter`
  *
+ * @example
  * ```js
  * import defaultButtonContext from './my-default-button-context.js';
  * import { createLitGetter as css } from '@meiuca/context-element';
  *
- * export css`
- * ${defaultButtonContext}
- *
+ * export default css(defaultButtonContext)`
  * input {
  *  background-color: ${({ backgroundColor }) => backgroundColor};
  * }
@@ -96,6 +86,5 @@ export function createGooberGetter<DefaultContext>(
  * ```
  */
 export function createLitGetter<DefaultContext>(
-  tag: TemplateStringsArray,
-  ...props: CreateStyleGetterProps<DefaultContext>
-): StyleGetter;
+  defaultContext: DefaultContext,
+): (tag: TemplateStringsArray, ...props: CreateStyleGetterProps<DefaultContext>) => StyleGetter;

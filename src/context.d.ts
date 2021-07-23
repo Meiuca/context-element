@@ -1,12 +1,17 @@
-import { CSSResult } from 'lit-element';
-
 declare interface ContextRegistry {
   [id: string]: any;
 }
 
-export function getComponentContext<Context>(contextId: string, defaultContext?: Context): Context;
+export function getComponentContext<Context = {}>(
+  contextId: string,
+  defaultContext?: Context,
+): Context;
 
-export function updateRegisteredComponents(): void;
+/**
+ * @param affectedContexts Update only those components whose `contextId` is included in `affectedContexts`.
+ * If undefined, updates all registered components
+ */
+export function updateRegisteredComponents(affectedContexts?: Array<string>): void;
 
 /**
  * @param contextId If omitted, the function will clear the entire DSContext

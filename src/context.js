@@ -12,19 +12,30 @@ export function getComponentContext(contextId, defaultContext = {}) {
   return merge(cloneDeep(defaultContext), componentCurrentContext);
 }
 
-export function updateRegisteredComponents() {
-  if (!globalThis.window.DSRegistry) {
+/**
+ *
+ * @param {Array<string>} affectedContexts
+ */
+export function updateRegisteredComponents(affectedContexts) {
+  if (!window.DSRegistry) {
     throw new Error('DSRegistry is not defined');
   }
 
-  // TODO: find a more performative way to update
-  globalThis.window.DSRegistry.forEach(component => component.updateStyles());
+  const lazyUpdate = component => component.updateStyles();
+
+  const updateIfAffected = component => {
+    if (affectedContexts.includes(component.contextId)) component.updateStyles();
+  };
+
+  window.DSRegistry.forEach(affectedContexts ? updateIfAffected : lazyUpdate);
 }
 
 export async function setContext(arg1, arg2) {
   if (!globalThis.window.DSContext) {
     throw new Error('DSContext is not defined');
   }
+
+  const affectedContexts = [];
 
   // Set global context using a url
   if (typeof arg1 === 'string' && !arg2) {
@@ -35,8 +46,14 @@ export async function setContext(arg1, arg2) {
 
       const newContext = merge(oldComponentContext, newComponentContext);
 
-      globalThis.window.DSContext.set(componentId, newContext);
+      window.DSContext.set(componentId, newContext);
+
+      affectedContexts.push(componentId);
     });
+
+    updateRegisteredComponents(affectedContexts);
+
+    return;
   }
 
   // Set component context using a object
@@ -45,7 +62,13 @@ export async function setContext(arg1, arg2) {
 
     const newContext = merge(oldComponentContext, arg2);
 
-    globalThis.window.DSContext.set(arg1, newContext);
+    window.DSContext.set(arg1, newContext);
+
+    affectedContexts.push(arg1);
+
+    updateRegisteredComponents(affectedContexts);
+
+    return;
   }
 
   // Set component context using a url
@@ -56,7 +79,13 @@ export async function setContext(arg1, arg2) {
 
     const newContext = merge(oldComponentContext, newComponentContext);
 
-    globalThis.window.DSContext.set(arg1, newContext);
+    window.DSContext.set(arg1, newContext);
+
+    affectedContexts.push(arg1);
+
+    updateRegisteredComponents(affectedContexts);
+
+    return;
   }
 
   // Set global context using a object
@@ -66,11 +95,13 @@ export async function setContext(arg1, arg2) {
 
       const newContext = merge(oldComponentContext, newComponentContext);
 
-      globalThis.window.DSContext.set(componentId, newContext);
-    });
-  }
+      window.DSContext.set(componentId, newContext);
 
-  updateRegisteredComponents();
+      affectedContexts.push(componentId);
+    });
+
+    updateRegisteredComponents(affectedContexts);
+  }
 }
 
 export function clearContext(contextId) {
@@ -81,7 +112,7 @@ export function clearContext(contextId) {
   if (typeof contextId === 'string') {
     const deleted = globalThis.window.DSContext.delete(contextId);
 
-    if (deleted) updateRegisteredComponents();
+    if (deleted) updateRegisteredComponents([contextId]);
 
     return deleted;
   }
