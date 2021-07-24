@@ -1,7 +1,7 @@
 {
-  "name": "@meiuca_design/context-element",
+  "name": "@jotads/context-element",
   "description": "A LitElement overlay to support contexts",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "src",
   "module": "src",
