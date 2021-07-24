@@ -7,7 +7,7 @@ control and handles Scss-in-JS (powered by [Goober](https://github.com/cristianb
 
 This package is only available on Github.
 
-`yarn add Meiuca/context-element`
+`yarn add @jota-ds/context-element`
 
 or
 

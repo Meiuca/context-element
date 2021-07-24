@@ -1,5 +1,5 @@
 {
-  "name": "@jotads/context-element",
+  "name": "@jota-ds/context-element",
   "description": "A LitElement overlay to support contexts",
   "version": "1.0.0",
   "license": "MIT",
