@@ -9,10 +9,6 @@ This package is only available on Github.
 
 `yarn add @jota-ds/context-element`
 
-or
-
-`yarn add https://github.com/Meiuca/context-element.git`
-
 ## Getting Started
 
 This library uses decorators and loose class properties, which are not supported by browsers.
